@@ -24,16 +24,16 @@ class Source(BaseModel):
 
 class Step(BaseModel):
     id: str
-    title: str                # "Сдать ферритин"
+    title: str
     kind: Literal["lab", "visit", "imaging", "lifestyle", "urgent"]
     zone: Literal["now", "two_weeks", "planned"]
-    why: str                  # причина простым языком
+    why: str
     confidence: Literal["high", "medium", "doctor_decides"]
+    trigger: Optional[str] = None
     sources: list[Source] = []
     questions_for_doctor: list[str] = []
     depends_on: list[str] = []
     skipped_reason: Optional[str] = None
-    status: Literal["planned", "done", "overdue"] = "planned"
 
 class Plan(BaseModel):
     version: int
@@ -46,3 +46,15 @@ class ClinicFunnel(BaseModel):
     reached_next_step: int
     overdue: int
     by_step: dict[str, dict[str, int]]
+
+class PlanDiff(BaseModel):
+    added: list[Step]
+    removed: list[Step]
+    changed: list[tuple[Step, Step]]
+    explanation: str
+
+class Comparison(BaseModel):
+    matched: list[Step]
+    possibly_missing: list[Step]
+    unclear: list[str]
+    questions_for_doctor: list[str]

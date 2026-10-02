@@ -1,0 +1,101 @@
+{
+  "pathway": "anemia",
+  "source": {
+    "document": "Клинические рекомендации «Железодефицитная анемия» (ID 669, 2024, Национальное гематологическое общество, одобрены Научно-практическим советом Минздрава РФ)",
+    "section": "Диагностика"
+  },
+  "validity_days": {"hemoglobin": 30, "ferritin": 90},
+  "red_flags": [
+    "Симптомы декомпенсации анемии: резкая слабость, сильное сердцебиение, головокружение",
+    "Гемоглобин ниже 70 г/л по результатам анализа",
+    "Обморок или потеря сознания",
+    "Боль в груди или одышка в покое",
+    "Чёрный стул, кровь в стуле или рвоте",
+    "Очень обильное кровотечение"
+  ],
+  "nodes": [
+    {
+      "id": "ferritin_low",
+      "note": "ферритин ниже 30 нг/мл: возможен дефицит железа, нужен полный анализ обмена железа",
+      "section": "Диагностика, п. 3 «Лабораторные диагностические исследования»",
+      "when": {"lab": "ferritin", "lt": 30},
+      "then": [
+        {"step": "lab_iron_panel", "zone": "two_weeks"},
+        {"step": "visit_therapist", "zone": "two_weeks"}
+      ]
+    },
+    {
+      "id": "ferritin_low_no_cbc",
+      "note": "ферритин низкий, а общий анализ крови с гемоглобином не сдавался",
+      "section": "Диагностика, п. 3 «Лабораторные диагностические исследования»",
+      "when": {"lab": "ferritin", "lt": 30, "missing_lab": "hemoglobin"},
+      "then": [
+        {"step": "lab_cbc", "zone": "two_weeks"}
+      ]
+    },
+    {
+      "id": "hb_low_f",
+      "note": "гемоглобин ниже 120 г/л у женщины: нужно проверить запасы железа",
+      "section": "Диагностика, п. 3 «Лабораторные диагностические исследования»",
+      "when": {"lab": "hemoglobin", "sex": "f", "lt": 120},
+      "then": [
+        {"step": "lab_ferritin", "zone": "two_weeks"},
+        {"step": "lab_iron_panel", "zone": "two_weeks"},
+        {"step": "visit_therapist", "zone": "two_weeks"}
+      ]
+    },
+    {
+      "id": "hb_low_m",
+      "note": "гемоглобин ниже 130 г/л у мужчины: нужно проверить запасы железа",
+      "section": "Диагностика, п. 3 «Лабораторные диагностические исследования»",
+      "when": {"lab": "hemoglobin", "sex": "m", "lt": 130},
+      "then": [
+        {"step": "lab_ferritin", "zone": "two_weeks"},
+        {"step": "lab_iron_panel", "zone": "two_weeks"},
+        {"step": "visit_therapist", "zone": "two_weeks"}
+      ]
+    },
+    {
+      "id": "hb_critical",
+      "note": "гемоглобин ниже 70 г/л: это тяжёлая анемия, не откладывайте обращение",
+      "section": "Лечение: тяжёлая анемия (гемоглобин менее 70 г/л)",
+      "when": {"lab": "hemoglobin", "lt": 70},
+      "then": [
+        {"step": "urgent_visit", "zone": "now"}
+      ]
+    },
+    {
+      "id": "ida_pattern_f",
+      "note": "низкие ферритин и гемоглобин у женщины: по рекомендации врач ищет причину и сопутствующие состояния",
+      "section": "Диагностика, п. 3 и п. 4 «Лабораторные и инструментальные исследования»",
+      "when": {"all": [
+        {"lab": "ferritin", "lt": 30},
+        {"lab": "hemoglobin", "sex": "f", "lt": 120}
+      ]},
+      "then": [
+        {"step": "lab_biochem", "zone": "two_weeks"},
+        {"step": "lab_urinalysis", "zone": "two_weeks"},
+        {"step": "imaging_ultrasound", "zone": "planned"},
+        {"step": "imaging_chest", "zone": "planned"},
+        {"step": "ecg", "zone": "planned"}
+      ]
+    },
+    {
+      "id": "ida_pattern_m",
+      "note": "низкие ферритин и гемоглобин у мужчины: по рекомендации обязателен поиск источника кровопотери",
+      "section": "Диагностика, п. 3 и п. 4 «Лабораторные и инструментальные исследования»",
+      "when": {"all": [
+        {"lab": "ferritin", "lt": 30},
+        {"lab": "hemoglobin", "sex": "m", "lt": 130}
+      ]},
+      "then": [
+        {"step": "lab_biochem", "zone": "two_weeks"},
+        {"step": "lab_urinalysis", "zone": "two_weeks"},
+        {"step": "imaging_ultrasound", "zone": "planned"},
+        {"step": "imaging_chest", "zone": "planned"},
+        {"step": "ecg", "zone": "planned"},
+        {"step": "endoscopy_gi", "zone": "planned"}
+      ]
+    }
+  ]
+}
