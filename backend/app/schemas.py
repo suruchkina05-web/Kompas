@@ -1,49 +1,46 @@
-"""Схемы данных Pydantic для состояния пациента, маршрута и клиники."""
-from datetime import date
-from typing import Annotated, Literal
-
-from pydantic import BaseModel, BeforeValidator, Field
+from typing import Literal, Optional
+from pydantic import BaseModel, Field, field_validator
 
 
-def _ensure_list(v):
-    """Преобразует None или отсутствие значения в пустой список."""
-    if v is None:
-        return []
-    return v
+FindingType = Literal["mammography", "ct_chest", "xray_chest", "ultrasound", "mri", "lab"]
+
+
+class Finding(BaseModel):
+    modality: str = "CT"
+    finding: str = ""
+    bi_rads: Optional[str] = None
+    organ: Optional[str] = None
+    taken_on: Optional[str] = None
+    code: Optional[str] = None
+    val: Optional[str] = None
+    finding_type: FindingType = "mammography"
 
 
 class LabResult(BaseModel):
     code: str
-    value: float
-    unit: str
-    taken_on: date | None = None
-
-
-class ImagingFinding(BaseModel):
-    modality: str  # Mammography, CT, X-ray
-    finding: str
-    bi_rads: str | None = None
-    organ: str | None = None
-    taken_on: date | None = None
+    val: str
+    unit: Optional[str] = ""
+    value: Optional[str] = ""
+    taken_on: Optional[str] = None
 
 
 class PatientState(BaseModel):
     patient_id: str
-    sex: Literal["m", "f"]
-    age: int
-    # Защита от NoneType: если экстрактор вернёт None, автоматически подставится []
-    complaints: Annotated[list[str], BeforeValidator(_ensure_list)] = Field(
-        default_factory=list
-    )
-    labs: Annotated[list[LabResult], BeforeValidator(_ensure_list)] = Field(
-        default_factory=list
-    )
-    findings: Annotated[list[ImagingFinding], BeforeValidator(_ensure_list)] = (
-        Field(default_factory=list)
-    )
+    sex: Optional[str] = None
+    age: Optional[int] = None
+    complaints: list[str] = Field(default_factory=list)
+    labs: list[LabResult] = Field(default_factory=list)
+    findings: list[Finding] = Field(default_factory=list)
+
+    @field_validator("complaints", "labs", "findings", mode="before")
+    @classmethod
+    def default_none_to_list(cls, v):
+        if v is None:
+            return []
+        return v
 
 
-class RuleSource(BaseModel):
+class StepSource(BaseModel):
     document: str
     section: str
 
@@ -51,26 +48,68 @@ class RuleSource(BaseModel):
 class PlanStep(BaseModel):
     id: str
     title: str
-    zone: Literal["now", "two_weeks", "planned"]
-    confidence: Literal["high", "medium", "doctor_decides"]
-    kind: Literal["lab", "visit", "imaging", "lifestyle", "urgent", "biopsy"]
-    why: str
+    zone: str = "now"
+    why: str = ""
+    confidence: str = "high"
+    kind: Literal["imaging", "consultation", "biopsy", "lab", "followup", "urgent", "lifestyle", "visit"] = "imaging"
+    guideline_ref: Optional[str] = None
+    trigger: Optional[str] = None
+    skipped_reason: Optional[str] = None
     questions_for_doctor: list[str] = Field(default_factory=list)
-    sources: list[RuleSource] = Field(default_factory=list)
-    skipped_reason: str | None = None
+    sources: list[StepSource] = Field(default_factory=list)
+
+    @field_validator("questions_for_doctor", "sources", mode="before")
+    @classmethod
+    def default_none_to_list(cls, v):
+        if v is None:
+            return []
+        return v
 
 
 class PatientPlan(BaseModel):
-    version: int
-    steps: list[PlanStep]
+    version: int = 1
+    steps: list[PlanStep] = Field(default_factory=list)
     red_flags: list[str] = Field(default_factory=list)
+
+    @field_validator("steps", "red_flags", mode="before")
+    @classmethod
+    def default_none_to_list(cls, v):
+        if v is None:
+            return []
+        return v
+
+
+class PlanDiff(BaseModel):
+    added: list[PlanStep] = Field(default_factory=list)
+    removed: list[PlanStep] = Field(default_factory=list)
+    unchanged: list[PlanStep] = Field(default_factory=list)
+
+
+class Comparison(BaseModel):
+    matched: list[PlanStep] = Field(default_factory=list)
+    possibly_missing: list[PlanStep] = Field(default_factory=list)
+    unclear: list[str] = Field(default_factory=list)
+    questions_for_doctor: list[str] = Field(default_factory=list)
+
+
+class PlanResponse(BaseModel):
+    state: PatientState
+    plan: PatientPlan
+    diff: Optional[PlanDiff] = None
+
+
+class FunnelStage(BaseModel):
+    stage_id: str
+    title: str
+    patient_count: int = 0
 
 
 class ClinicFunnel(BaseModel):
-    total_patients: int
-    got_plan: int
-    reached_next_step: int
-    overdue_patients: int
-    by_step: dict[str, dict[str, int]]
-    step_titles: dict[str, str]
-    stuck: list[dict[str, str]]
+    total_patients: int = 0
+    stages: list[FunnelStage] = Field(default_factory=list)
+
+
+class ImagingFinding(BaseModel):
+    modality: str
+    finding: str
+    recommendation: Optional[str] = None

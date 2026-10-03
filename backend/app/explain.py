@@ -3,8 +3,8 @@ import json
 import traceback
 
 from app.llm import ask, _clean_json
-from app.schemas import PatientState, Plan
 from app.rules.engine import load_steps
+from app.schemas import PatientPlan, PatientState
 
 SYSTEM = """Ты объясняешь пациенту уже определённые шаги маршрута обращения.
 Ты НЕ ставишь диагнозы, НЕ назначаешь лечение и НЕ оцениваешь работу врачей.
@@ -24,25 +24,30 @@ PROMPT = """Данные пациента:
   {{"id": "id шага",
     "why": "2-3 предложения: назови конкретный показатель пациента и его значение, затем цель шага. Больше ничего не объясняй",
     "questions": ["1-2 вопроса, которые ПАЦИЕНТ задаёт ВРАЧУ на приёме, от первого лица"]}}
-]}}
+]}}"""
 
-Примеры хороших вопросов пациента врачу:
-- Что означают мои результаты ферритина и гемоглобина?
-- Какие обследования мне нужны, чтобы выяснить причину?
-- Через какое время нужно повторить анализы?
-Вопросы, которые врач задаёт пациенту, писать нельзя."""
-
-BANNED = ["у вас анемия", "у вас диагноз", "принимайте", "вам нужно принимать",
-          "врач ошибся", "неправильно", "должен был", "врач назначил"]
+BANNED = [
+    "у вас анемия",
+    "у вас диагноз",
+    "принимайте",
+    "вам нужно принимать",
+    "врач ошибся",
+    "неправильно",
+    "должен был",
+    "врач назначил",
+]
 
 FALLBACK = "Этот шаг предусмотрен клинической рекомендацией при таких данных. Уточните детали у врача."
 
 
 def _facts(state: PatientState) -> str:
-    labs = "; ".join(f"{l.code} {l.value} {l.unit} ({l.taken_on or 'дата не указана'})"
-                     for l in state.labs) or "анализов нет"
-    return (f"пол: {state.sex}, возраст: {state.age}; "
-            f"жалобы: {', '.join(state.complaints) or 'не указаны'}; анализы: {labs}")
+    findings_str = "; ".join(
+        f"{f.modality}: {f.finding}" for f in state.findings
+    ) or "находок нет"
+    return (
+        f"пол: {state.sex}, возраст: {state.age}; "
+        f"жалобы: {', '.join(state.complaints) or 'не указаны'}; находки: {findings_str}"
+    )
 
 
 def _ok(text: str) -> bool:
@@ -51,11 +56,9 @@ def _ok(text: str) -> bool:
 
 
 def _ask_items(prompt: str) -> list[dict]:
-    """Вызывает модель. Печатает ответ и причину ошибки в терминал, повторяет один раз."""
     for attempt in (1, 2):
         try:
             raw = ask(prompt, SYSTEM)
-            print(f"=== EXPLAIN RAW (попытка {attempt}) ===\n{raw[:2000]}")
             data = json.loads(_clean_json(raw))
             items = data if isinstance(data, list) else data.get("items", [])
             return [i for i in items if isinstance(i, dict)]
@@ -64,21 +67,20 @@ def _ask_items(prompt: str) -> list[dict]:
     return []
 
 
-def explain_plan(state: PatientState, plan: Plan) -> Plan:
+def explain_plan(state: PatientState, plan: PatientPlan) -> PatientPlan:
     catalog = load_steps()
     active = [s for s in plan.steps if not s.skipped_reason]
     if not active:
         return plan
 
     steps_txt = "\n".join(
-        f"- id={s.id}; шаг: {s.title}; данные, которые привели к шагу: {s.trigger}; "
+        f"- id={s.id}; шаг: {s.title}; данные: {s.trigger or 'изменение на снимке'}; "
         f"цель шага: {catalog.get(s.id, {}).get('purpose', 'не указана')}"
         for s in active
     )
     items = _ask_items(PROMPT.format(facts=_facts(state), steps=steps_txt))
 
     by_id = {str(i.get("id")): i for i in items}
-    # если модель перепутала id, но вернула столько же элементов, сопоставляем по порядку
     if not any(s.id in by_id for s in active) and len(items) == len(active):
         by_id = {s.id: it for s, it in zip(active, items)}
 
@@ -88,15 +90,11 @@ def explain_plan(state: PatientState, plan: Plan) -> Plan:
         if _ok(why):
             s.why = why
         else:
-            if why:
-                print(f"=== ОТКЛОНЕНО фильтром ({s.id}) ===\n{why}")
-            s.why = FALLBACK
+            s.why = catalog.get(s.id, {}).get("description", FALLBACK)
             s.confidence = "doctor_decides"
+
         questions = item.get("questions", [])
         if isinstance(questions, list):
             s.questions_for_doctor = [str(q) for q in questions if _ok(str(q))][:3]
 
-    for s in plan.steps:
-        if s.skipped_reason and not s.why:
-            s.why = s.skipped_reason
     return plan

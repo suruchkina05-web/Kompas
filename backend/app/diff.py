@@ -1,22 +1,11 @@
-from app.schemas import Comparison, PatientState, PlanDiff, PlanResponse, PlanStep
+from app.schemas import PatientPlan, PlanDiff
 
-
-def diff_plans(old_plan: PlanResponse, new_plan: PlanResponse) -> PlanDiff:
-    """Сравнивает два плана маршрутизации и вычисляет добавленные и удалённые шаги."""
+def diff_plans(old_plan: PatientPlan, new_plan: PatientPlan) -> PlanDiff:
     old_steps = {s.id: s for s in old_plan.steps}
     new_steps = {s.id: s for s in new_plan.steps}
 
-    added = [step for step_id, step in new_steps.items() if step_id not in old_steps]
-    removed = [step for step_id, step in old_steps.items() if step_id not in new_steps]
+    added = [s for s_id, s in new_steps.items() if s_id not in old_steps]
+    removed = [s for s_id, s in old_steps.items() if s_id not in new_steps]
+    unchanged = [s for s_id, s in new_steps.items() if s_id in old_steps]
 
-    return PlanDiff(added=added, removed=removed)
-
-
-def compare_plans(before: PlanResponse, after: PlanResponse) -> Comparison:
-    """Формирует объект сравнения двух планов с подробной разницей (diff)."""
-    difference = diff_plans(before, after)
-    return Comparison(
-        before=before,
-        after=after,
-        diff=difference,
-    )
+    return PlanDiff(added=added, removed=removed, unchanged=unchanged)
