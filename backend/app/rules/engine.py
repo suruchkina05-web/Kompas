@@ -1,60 +1,69 @@
-# app/rules/engine.py
 import json
+import re
 from pathlib import Path
-from ..schemas import PatientState
 
-DIR = Path(__file__).parent
+from app.schemas import PatientState
 
-
-def load_graphs() -> list[dict]:
-    return [json.loads(p.read_text(encoding="utf-8"))
-            for p in DIR.glob("*.json") if p.name != "steps.json"]
+STEPS_FILE = Path(__file__).parent / "steps.json"
 
 
 def load_steps() -> dict:
-    return json.loads((DIR / "steps.json").read_text(encoding="utf-8"))
+    """Загружает базу шагов маршрутизации из JSON-файла."""
+    if not STEPS_FILE.exists():
+        return {}
+    with open(STEPS_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 
-def _latest(state: PatientState, code: str):
-    labs = [l for l in state.labs if l.code == code]
-    if not labs:
-        return None
-    return max(labs, key=lambda l: l.taken_on.toordinal() if l.taken_on else 0)
+def _extract_nodule_size(text: str) -> float | None:
+    """Извлекает размер очага в мм из текста (например, 'очаг 8 мм' или '8.5мм')."""
+    match = re.search(r"(\d+(?:[\.,]\d+)?)\s*мм", text.lower())
+    if match:
+        return float(match.group(1).replace(",", "."))
+    return None
 
 
-def matches(when: dict, state: PatientState) -> bool:
-    if "all" in when:
-        return all(matches(c, state) for c in when["all"])
-    if "sex" in when and state.sex != when["sex"]:
-        return False
-    if "lab" in when:
-        lab = _latest(state, when["lab"])
-        if lab is None:
-            return False
-        if "lt" in when and not lab.value < when["lt"]:
-            return False
-        if "gt" in when and not lab.value > when["gt"]:
-            return False
-    if "missing_lab" in when and _latest(state, when["missing_lab"]) is not None:
-        return False
-    return True
+def evaluate_rules(state: PatientState) -> list[str]:
+    """Анализирует findings пациента и возвращает список сработавших step_id."""
+    triggered = []
 
+    for f in state.findings:
+        finding_text = (f.finding or "").lower()
+        bi_rads = (f.bi_rads or "").upper().strip()
+        modality = (f.modality or "").strip()
 
-def evaluate(state: PatientState) -> list[dict]:
-    out = []
-    for g in load_graphs():
-        for node in g["nodes"]:
-            if matches(node["when"], state):
-                source = {**g["source"],
-                          "section": node.get("section", g["source"]["section"])}
-                for t in node["then"]:
-                    out.append({
-                        **t,
-                        "pathway": g["pathway"],
-                        "node": node["id"],
-                        "note": node.get("note", ""),
-                        "source": source,
-                        "red_flags": g.get("red_flags", []),
-                        "validity_days": g.get("validity_days", {}),
-                    })
-    return out
+        # --- 1. Маммография (BI-RADS) ---
+        if modality == "Mammography" or "маммогр" in finding_text:
+            if "BI-RADS 4" in bi_rads or "BI-RADS 5" in bi_rads or "bi-rads 4" in finding_text or "bi-rads 5" in finding_text:
+                if "mammography_bi_rads_4_5" not in triggered:
+                    triggered.append("mammography_bi_rads_4_5")
+            elif "BI-RADS 3" in bi_rads or "bi-rads 3" in finding_text:
+                if "mammography_bi_rads_3" not in triggered:
+                    triggered.append("mammography_bi_rads_3")
+
+        # --- 2. Компьютерная томография (КТ ОГК / очаги) ---
+        if modality == "CT" or "кт" in finding_text or "томограф" in finding_text:
+            if "очаг" in finding_text or "образование" in finding_text or "узел" in finding_text:
+                size_mm = _extract_nodule_size(finding_text)
+                if size_mm is not None:
+                    if size_mm > 6.0:
+                        if "ct_lung_nodule_gt_6mm" not in triggered:
+                            triggered.append("ct_lung_nodule_gt_6mm")
+                    else:
+                        if "ct_lung_nodule_lt_6mm" not in triggered:
+                            triggered.append("ct_lung_nodule_lt_6mm")
+                else:
+                    if "> 6" in finding_text or "более 6" in finding_text:
+                        if "ct_lung_nodule_gt_6mm" not in triggered:
+                            triggered.append("ct_lung_nodule_gt_6mm")
+                    else:
+                        if "ct_lung_nodule_lt_6mm" not in triggered:
+                            triggered.append("ct_lung_nodule_lt_6mm")
+
+        # --- 3. Рентгенография (X-ray / инфильтрация / пневмония) ---
+        if modality == "X-ray" or "рентген" in finding_text or "инфильтрат" in finding_text:
+            if "инфильтрат" in finding_text or "пневмон" in finding_text or "затенение" in finding_text:
+                if "xray_pneumonia_infiltrate" not in triggered:
+                    triggered.append("xray_pneumonia_infiltrate")
+
+    return triggered

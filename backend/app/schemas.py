@@ -1,60 +1,76 @@
+"""Схемы данных Pydantic для состояния пациента, маршрута и клиники."""
 from datetime import date
-from typing import Literal, Optional
-from pydantic import BaseModel
+from typing import Annotated, Literal
 
-class Lab(BaseModel):
-    code: str                 # "hemoglobin", "ferritin", "tsh", "ldl"
+from pydantic import BaseModel, BeforeValidator, Field
+
+
+def _ensure_list(v):
+    """Преобразует None или отсутствие значения в пустой список."""
+    if v is None:
+        return []
+    return v
+
+
+class LabResult(BaseModel):
+    code: str
     value: float
     unit: str
-    ref_low: Optional[float] = None
-    ref_high: Optional[float] = None
-    taken_on: date
+    taken_on: date | None = None
+
+
+class ImagingFinding(BaseModel):
+    modality: str  # Mammography, CT, X-ray
+    finding: str
+    bi_rads: str | None = None
+    organ: str | None = None
+    taken_on: date | None = None
+
 
 class PatientState(BaseModel):
     patient_id: str
-    sex: Literal["f", "m"]
+    sex: Literal["m", "f"]
     age: int
-    complaints: list[str] = []
-    labs: list[Lab] = []
+    # Защита от NoneType: если экстрактор вернёт None, автоматически подставится []
+    complaints: Annotated[list[str], BeforeValidator(_ensure_list)] = Field(
+        default_factory=list
+    )
+    labs: Annotated[list[LabResult], BeforeValidator(_ensure_list)] = Field(
+        default_factory=list
+    )
+    findings: Annotated[list[ImagingFinding], BeforeValidator(_ensure_list)] = (
+        Field(default_factory=list)
+    )
 
-class Source(BaseModel):
-    document: str             # название рекомендации
-    section: str              # раздел
-    quote: str                # короткая выдержка
 
-class Step(BaseModel):
+class RuleSource(BaseModel):
+    document: str
+    section: str
+
+
+class PlanStep(BaseModel):
     id: str
     title: str
-    kind: Literal["lab", "visit", "imaging", "lifestyle", "urgent"]
     zone: Literal["now", "two_weeks", "planned"]
-    why: str
     confidence: Literal["high", "medium", "doctor_decides"]
-    trigger: Optional[str] = None
-    sources: list[Source] = []
-    questions_for_doctor: list[str] = []
-    depends_on: list[str] = []
-    skipped_reason: Optional[str] = None
+    kind: Literal["lab", "visit", "imaging", "lifestyle", "urgent", "biopsy"]
+    why: str
+    questions_for_doctor: list[str] = Field(default_factory=list)
+    sources: list[RuleSource] = Field(default_factory=list)
+    skipped_reason: str | None = None
 
-class Plan(BaseModel):
+
+class PatientPlan(BaseModel):
     version: int
-    steps: list[Step]
-    red_flags: list[str]
-    verifier_notes: list[str] = []
+    steps: list[PlanStep]
+    red_flags: list[str] = Field(default_factory=list)
+
 
 class ClinicFunnel(BaseModel):
+    total_patients: int
     got_plan: int
     reached_next_step: int
-    overdue: int
+    overdue_patients: int
     by_step: dict[str, dict[str, int]]
-
-class PlanDiff(BaseModel):
-    added: list[Step]
-    removed: list[Step]
-    changed: list[tuple[Step, Step]]
-    explanation: str
-
-class Comparison(BaseModel):
-    matched: list[Step]
-    possibly_missing: list[Step]
-    unclear: list[str]
-    questions_for_doctor: list[str]
+    step_titles: dict[str, str]
+    stuck: list[dict[str, str]]

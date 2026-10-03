@@ -1,27 +1,33 @@
 import sys
 from pathlib import Path
+from typing import Optional
 
 # Автоматически добавляем корень проекта и папку backend в пути импорта Python
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
-from typing import Optional
-
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
-from app.schemas import PatientState, Plan, PlanDiff, Comparison
+
+from app.clinic import router as clinic_router
+from app.compare import compare_with_text
+from app.diff import diff_plans
+from app.explain import explain_plan
 from app.llm import extract_patient_state
 from app.planner import build_plan
-from app.explain import explain_plan
-from app.verifier import verify_plan
+from app.schemas import Comparison, PatientState, PlanDiff, PlanResponse
+from app.site import router as site_router
 from app.state import merge_state
-from app.diff import diff_plans
-from app.compare import compare_with_text
+from app.verifier import verify_plan
 
-app = FastAPI(title="Компас API")
+app = FastAPI(title="Компас API (Третье Мнение - Лучевая диагностика)")
 
-PATIENTS: dict[str, PatientState] = {}   # пока в памяти, SQLite позже
-PLANS: dict[str, list[Plan]] = {}        # история версий плана
+app.include_router(site_router)  # сайт пациента: /app
+app.include_router(clinic_router)  # панель клиники: /clinic
+
+PATIENTS: dict[str, PatientState] = {}
+PLANS: dict[str, list[PlanResponse]] = {}
 
 
 class ParseRequest(BaseModel):
@@ -33,33 +39,39 @@ class OrdersRequest(BaseModel):
     raw_text: str
 
 
-class PlanResponse(BaseModel):
+class PlanDocumentResponse(BaseModel):
     state: PatientState
-    plan: Plan
+    plan: PlanResponse
     diff: Optional[PlanDiff] = None
 
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 def read_root():
-    return {"status": "ok", "message": "Сервис Компас работает"}
+    """Главная страница ведёт на сайт пациента."""
+    return RedirectResponse(url="/app")
+
+
+@app.get("/health")
+def health():
+    return {"status": "ok", "message": "Сервис Компас (Третье Мнение) работает"}
 
 
 @app.post("/patients/parse", response_model=PatientState)
 def parse_patient_data(req: ParseRequest):
-    """Только извлечение данных."""
+    """Только извлечение данных лучевой диагностики из текста."""
     try:
         return extract_patient_state(raw_text=req.raw_text, patient_id=req.patient_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.post("/patients/documents", response_model=PlanResponse)
+@app.post("/patients/documents", response_model=PlanDocumentResponse)
 def add_document(req: ParseRequest):
-    """Новый документ -> обновлённая карточка -> маршрут -> проверка -> что изменилось."""
+    """Новое заключение -> обновлённая карточка -> маршрут -> проверка -> дифференциал."""
     try:
         old_state = PATIENTS.get(req.patient_id)
         text = req.raw_text
-        if old_state:   # второй документ может не содержать пол и возраст
+        if old_state:
             text = f"Известные данные пациента: пол {old_state.sex}, возраст {old_state.age}.\n{text}"
 
         new_part = extract_patient_state(raw_text=text, patient_id=req.patient_id)
@@ -67,29 +79,35 @@ def add_document(req: ParseRequest):
         PATIENTS[req.patient_id] = state
 
         history = PLANS.setdefault(req.patient_id, [])
-        plan = build_plan(state, version=len(history) + 1)
+
+        # Генерация плана и обогащение пояснениями
+        plan = build_plan(state)
         plan = explain_plan(state, plan)
-        plan = verify_plan(state, plan)
-        diff = diff_plans(history[-1], plan, state, new_labs=new_part.labs) if history else None
+
+        # Валидация плана на полноту
+        verification_result = verify_plan(state, plan)
+
+        # Расчет изменений от предыдущей версии
+        diff = diff_plans(history[-1], plan) if history else None
         history.append(plan)
 
-        return PlanResponse(state=state, plan=plan, diff=diff)
+        return PlanDocumentResponse(state=state, plan=plan, diff=diff)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/patients/{patient_id}/doctor-orders", response_model=Comparison)
 def compare_doctor_orders(patient_id: str, req: OrdersRequest):
-    """Сверка назначений врача с маршрутом по рекомендации («Третье мнение»)."""
+    """Сверка назначений врача с маршрутом по рекомендациям."""
     if patient_id not in PLANS or not PLANS[patient_id]:
-        raise HTTPException(status_code=404, detail="Сначала загрузите анализы пациента")
+        raise HTTPException(status_code=404, detail="Сначала загрузите заключения лучевой диагностики пациента")
     try:
         return compare_with_text(PLANS[patient_id][-1], req.raw_text)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@app.get("/patients/{patient_id}/plan", response_model=Plan)
+@app.get("/patients/{patient_id}/plan", response_model=PlanResponse)
 def get_plan(patient_id: str):
     if patient_id not in PLANS:
         raise HTTPException(status_code=404, detail="Пациент не найден")

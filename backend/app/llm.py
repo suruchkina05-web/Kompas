@@ -1,31 +1,30 @@
+import json
 import os
 import re
-import json
 from functools import lru_cache
-
 from dotenv import load_dotenv
 from gigachat import GigaChat
 from gigachat.models import Chat, Messages, MessagesRole
+
 from app.schemas import PatientState
 
 load_dotenv()
 
 SYSTEM_PROMPT = """
-Ты — медицинский ассистент сервиса Компас. 
-Твоя задача — проанализировать текст жалоб и результатов лабораторных анализов пациента и вернуть структурированный JSON, строго соответствующий следующей Pydantic-схеме:
+Ты — медицинский ассистент сервиса «Третье Мнение».
+Твоя задача — проанализировать текст заключения лучевой диагностики (КТ, маммография, рентгенография, МРТ) и вернуть структурированный JSON, строго соответствующий следующей Pydantic-схеме:
 
 {
   "patient_id": "уникальный_идентификатор",
   "sex": "f" или "m",
-  "age": число,
-  "complaints": ["список", "жалоб"],
-  "labs": [
+  "age": число_или_null,
+  "complaints": ["список", "жалоб_если_указаны"],
+  "findings": [
     {
-      "code": "СТРОГО один из: hemoglobin, ferritin, tsh, ldl (латиницей, именно так)",
-      "value": числовое_значение,
-      "unit": "единица_измерения",
-      "ref_low": нижняя_граница_или_null,
-      "ref_high": верхняя_граница_или_null,
+      "modality": "СТРОГО один из: CT, Mammography, X-ray, MRI (латиницей)",
+      "finding": "краткое описание патологии или находки (например, 'очаговое образование 8 мм', 'инфильтрат', 'узловое уплотнение')",
+      "bi_rads": "классификация BI-RADS (например, 'BI-RADS 4', 'BI-RADS 5') или null",
+      "organ": "исследуемый орган или область (например, 'молочная железа', 'лёгкие', 'органы грудной клетки') или null",
       "taken_on": "YYYY-MM-DD" или null
     }
   ]
@@ -36,12 +35,11 @@ SYSTEM_PROMPT = """
 Отвечай ТОЛЬКО валидным JSON без каких-либо вводных слов, пояснений и разметки markdown (без ```json).
 """
 
-# Страховка: модель иногда отвечает по-русски или другим написанием
-CODE_ALIASES = {
-    "hemoglobin": ["hemoglobin", "hb", "hgb", "гемоглобин"],
-    "ferritin": ["ferritin", "ферритин"],
-    "tsh": ["tsh", "ттг", "тиреотропный"],
-    "ldl": ["ldl", "лпнп"],
+MODALITY_ALIASES = {
+    "CT": ["ct", "кт", "компьютерная томография", "мскт"],
+    "Mammography": ["mammography", "маммография", "мг", "ммг"],
+    "X-ray": ["x-ray", "xray", "рентген", "рентгенография", "флюорография"],
+    "MRI": ["mri", "мрт", "магнитно-резонансная томография"],
 }
 
 
@@ -57,7 +55,7 @@ def _client() -> GigaChat:
     return GigaChat(
         credentials=_credentials(),
         scope="GIGACHAT_API_PERS",
-        verify_ssl_certs=False,   # только на время разработки
+        verify_ssl_certs=False,  # Только для разработки
     )
 
 
@@ -69,7 +67,6 @@ def _model_name() -> str:
         return env_model
     with _client() as giga:
         names = [m.id_ for m in giga.get_models().data]
-    print("=== ДОСТУПНЫЕ МОДЕЛИ ===", names)
     chat_models = [n for n in names if "embed" not in n.lower()]
     return (chat_models or names or ["GigaChat"])[0]
 
@@ -93,7 +90,7 @@ def _clean_json(text: str) -> str:
 
 
 def ask_json(prompt: str, system: str | None = None) -> dict:
-    """Просит JSON, чистит обёртку и повторяет запрос один раз."""
+    """Просит JSON, чистит обёртку и повторяет запрос при ошибке."""
     last_err = None
     for _ in range(2):
         text = _clean_json(ask(prompt, system))
@@ -104,35 +101,33 @@ def ask_json(prompt: str, system: str | None = None) -> dict:
     raise ValueError(f"Модель вернула не JSON: {last_err}")
 
 
-def _normalize_code(code) -> str | None:
-    c = str(code).strip().lower()
-    for canon, names in CODE_ALIASES.items():
+def _normalize_modality(modality_str: str) -> str:
+    m = str(modality_str).strip().lower()
+    for canon, names in MODALITY_ALIASES.items():
         for n in names:
-            if c == n or (len(n) >= 5 and n in c):
+            if m == n or n in m:
                 return canon
-    return None
+    return "CT"
 
 
-def _normalize_labs(labs: list[dict]) -> list[dict]:
+def _normalize_findings(findings: list[dict]) -> list[dict]:
     result = []
-    for lab in labs:
-        code = _normalize_code(lab.get("code", ""))
-        if code is None:          # анализ не из нашего списка, пропускаем
-            continue
-        lab["code"] = code
-        unit = str(lab.get("unit", "")).lower().replace(" ", "")
-        if code == "hemoglobin" and unit in ("г/дл", "g/dl"):
-            lab["value"] = lab["value"] * 10      # г/дл -> г/л
-            lab["unit"] = "г/л"
-        result.append(lab)
+    for item in findings:
+        item["modality"] = _normalize_modality(item.get("modality", ""))
+        result.append(item)
     return result
 
 
 def extract_patient_state(raw_text: str, patient_id: str) -> PatientState:
     data = ask_json(
-        f"Идентификатор пациента: {patient_id}\n\nТекст для анализа:\n{raw_text}",
+        f"Идентификатор пациента: {patient_id}\n\nТекст заключения:\n{raw_text}",
         system=SYSTEM_PROMPT,
     )
-    data["patient_id"] = patient_id   # не доверяем модели, берём из запроса
-    data["labs"] = _normalize_labs(data.get("labs", []))
+    data["patient_id"] = patient_id
+    data["findings"] = _normalize_findings(data.get("findings", []))
+
+    # Гарантируем отсутствие устаревшего поля labs
+    if "labs" in data:
+        del data["labs"]
+
     return PatientState(**data)
