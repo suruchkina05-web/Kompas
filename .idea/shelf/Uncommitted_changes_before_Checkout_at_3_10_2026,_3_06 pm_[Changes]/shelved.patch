@@ -1,0 +1,24 @@
+Index: .idea/Kompas.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<module type=\"PYTHON_MODULE\" version=\"4\">\n  <component name=\"NewModuleRootManager\">\n    <content url=\"file://$MODULE_DIR$\">\n      <sourceFolder url=\"file://$MODULE_DIR$/backend\" isTestSource=\"false\" />\n      <excludeFolder url=\"file://$MODULE_DIR$/.venv\" />\n    </content>\n    <orderEntry type=\"jdk\" jdkName=\"/Library/Frameworks/Python.framework/Versions/3.14/bin/python3.14\" jdkType=\"Python SDK\" />\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\n  </component>\n  <component name=\"PackageRequirementsSettings\" />\n  <component name=\"PyDocumentationSettings\" />\n  <component name=\"ReSTService\" />\n  <component name=\"TestRunnerService\" />\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/Kompas.iml b/.idea/Kompas.iml
+--- a/.idea/Kompas.iml	(revision 0b64fede70d27f3f745127ad897b651e187f3500)
++++ b/.idea/Kompas.iml	(date 1791028026604)
+@@ -5,11 +5,7 @@
+       <sourceFolder url="file://$MODULE_DIR$/backend" isTestSource="false" />
+       <excludeFolder url="file://$MODULE_DIR$/.venv" />
+     </content>
+-    <orderEntry type="jdk" jdkName="/Library/Frameworks/Python.framework/Versions/3.14/bin/python3.14" jdkType="Python SDK" />
++    <orderEntry type="jdk" jdkName="Python 3.14 (Kompas)" jdkType="Python SDK" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+-  <component name="PackageRequirementsSettings" />
+-  <component name="PyDocumentationSettings" />
+-  <component name="ReSTService" />
+-  <component name="TestRunnerService" />
+ </module>
+\ No newline at end of file
