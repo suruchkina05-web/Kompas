@@ -1,0 +1,26 @@
+{
+  "studyIUID": "mock-missing-data-001",
+  "modality": "CT",
+  "bodyPart": "CHEST",
+  "report": "В правом лёгком определяется солидный очаг размером 13.1 мм.",
+  "conclusion": "КТ-признаки солидного очага правого лёгкого размером 13.1 мм.",
+  "findings": [
+    {
+      "type": "solid_pulmonary_nodule",
+      "size_mm": 13.1
+    }
+  ],
+  "patientContext": {
+    "age": 64,
+    "smokingHistory": null,
+    "previousStudiesAvailable": true,
+    "oncologicalHistory": null
+  },
+  "knowledgeBaseContext": [
+    {
+      "sourceId": "DEMO-MISSING-DATA-001",
+      "sourceType": "synthetic_demo_rule",
+      "text": "Если выявлен solid_pulmonary_nodule размером более 10 мм, для автоматической маршрутизации должны быть известны age, smokingHistory и previousStudiesAvailable. oncologicalHistory в этом правиле не используется."
+    }
+  ]
+}

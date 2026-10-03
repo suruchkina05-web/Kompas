@@ -1,0 +1,38 @@
+{
+  "studyIUID": "1.2.643.5.1.13.13.12.2.77.8252.20261003.001",
+  "seriesIUID": "1.2.643.5.1.13.13.12.2.77.8252.20261003.001.1",
+  "modality": "CT",
+  "bodyPart": "CHEST",
+  "modelId": "ct-lung-ai-01",
+  "modelVersion": "3.4.2",
+  "pathologyFlag": true,
+  "confidenceLevel": 94,
+
+  "report": "В S6 нижней доли правого лёгкого определяется солидный периферический очаг округлой формы размером 14.2 мм. Плевральный выпот не определяется.",
+
+  "conclusion": "КТ-признаки солидного очага S6 нижней доли правого лёгкого размером 14.2 мм.",
+
+  "findings": [
+    {
+      "type": "solid_pulmonary_nodule",
+      "location": "S6 нижней доли правого лёгкого",
+      "size_mm": 14.2,
+      "confidence": 0.94
+    }
+  ],
+
+  "patientContext": {
+    "age": 64,
+    "smokingHistory": "current_smoker",
+    "previousStudiesAvailable": true
+  },
+
+  "knowledgeBaseContext": [
+    {
+      "sourceId": "DEMO-CT-LUNG-ROUTING-001",
+      "sourceType": "synthetic_demo_rule",
+      "title": "Демонстрационное правило маршрутизации пациента с солидным лёгочным очагом",
+      "text": "Если выявлен solid_pulmonary_nodule размером более 10 мм, возраст пациента 60 лет или старше, smokingHistory известен и previousStudiesAvailable известно, сформировать specialist_consultation. target: Специалист по заболеваниям органов грудной клетки. priority: high."
+    }
+  ]
+}

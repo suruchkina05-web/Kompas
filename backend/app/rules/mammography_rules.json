@@ -1,0 +1,334 @@
+[
+  {
+    "id": "hrt_annual_mammography",
+    "enabled": true,
+    "step_id": "hrt_annual_mammography",
+    "conditions": {
+      "clinical_context_in": [
+        "menopausal_HRT_monitoring"
+      ],
+      "age_gte": 40,
+      "has_mammography": true
+    }
+  },
+  {
+    "id": "hrt_acr_cd_ultrasound",
+    "enabled": true,
+    "step_id": "hrt_acr_cd_ultrasound",
+    "conditions": {
+      "clinical_context_in": [
+        "menopausal_HRT_monitoring"
+      ],
+      "any_acr_in": [
+        "C",
+        "D"
+      ]
+    }
+  },
+  {
+    "id": "hrt_abnormal_mammo_consult",
+    "enabled": true,
+    "step_id": "hrt_abnormal_mammo_consult",
+    "conditions": {
+      "clinical_context_in": [
+        "menopausal_HRT_monitoring"
+      ],
+      "any_of": [
+        {
+          "any_birads_not_in": [
+            1,
+            2
+          ]
+        },
+        {
+          "any_acr_in": [
+            "C",
+            "D"
+          ]
+        },
+        {
+          "finding_keywords_any": [
+            "узел",
+            "узлов",
+            "образован"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "id": "hrt_birads_0_oncology_eval",
+    "enabled": true,
+    "step_id": "hrt_birads_0_oncology_eval",
+    "conditions": {
+      "clinical_context_in": [
+        "menopausal_HRT_monitoring"
+      ],
+      "any_birads_in": [
+        0
+      ]
+    }
+  },
+  {
+    "id": "hrt_birads_3_verification",
+    "enabled": true,
+    "step_id": "hrt_birads_3_verification",
+    "conditions": {
+      "clinical_context_in": [
+        "menopausal_HRT_monitoring"
+      ],
+      "any_birads_in": [
+        3
+      ]
+    }
+  },
+  {
+    "id": "hrt_birads_4_5_6_oncology",
+    "enabled": true,
+    "step_id": "hrt_birads_4_5_6_oncology",
+    "conditions": {
+      "clinical_context_in": [
+        "menopausal_HRT_monitoring"
+      ],
+      "any_birads_in": [
+        4,
+        5,
+        6
+      ]
+    }
+  },
+  {
+    "id": "breast_cancer_ultrasound_nodes",
+    "enabled": true,
+    "step_id": "breast_cancer_ultrasound_nodes",
+    "conditions": {
+      "clinical_context_in": [
+        "suspected_breast_cancer",
+        "confirmed_breast_cancer"
+      ]
+    }
+  },
+  {
+    "id": "breast_cancer_biopsy",
+    "enabled": true,
+    "step_id": "breast_cancer_biopsy",
+    "conditions": {
+      "clinical_context_in": [
+        "suspected_breast_cancer"
+      ],
+      "has_any_breast_finding": true
+    }
+  },
+  {
+    "id": "breast_cancer_mri_if_dense",
+    "enabled": true,
+    "step_id": "breast_cancer_mri_if_dense",
+    "conditions": {
+      "clinical_context_in": [
+        "suspected_breast_cancer",
+        "confirmed_breast_cancer"
+      ],
+      "any_acr_in": [
+        "C",
+        "D"
+      ]
+    }
+  },
+  {
+    "id": "breast_cancer_followup_annual_mammo",
+    "enabled": true,
+    "step_id": "breast_cancer_followup_annual_mammo",
+    "conditions": {
+      "clinical_context_in": [
+        "follow_up_after_breast_cancer_treatment"
+      ]
+    }
+  },
+  {
+    "id": "inflammation_no_response_exclude_malignancy",
+    "enabled": true,
+    "step_id": "inflammation_no_response_exclude_malignancy",
+    "conditions": {
+      "clinical_context_in": [
+        "inflammatory_breast_disease"
+      ],
+      "no_response_to_antiinflammatory_treatment_is": true
+    }
+  },
+  {
+    "id": "ovarian_workup_mammography_40_plus",
+    "enabled": true,
+    "step_id": "ovarian_workup_mammography_40_plus",
+    "conditions": {
+      "clinical_context_in": [
+        "ovarian_cancer_workup"
+      ],
+      "sex_in": [
+        "f"
+      ],
+      "age_gte": 40,
+      "has_mammography": false
+    }
+  },
+  {
+    "id": "unknown_primary_mammography_40_plus",
+    "enabled": true,
+    "step_id": "unknown_primary_mammography_40_plus",
+    "conditions": {
+      "clinical_context_in": [
+        "cancer_of_unknown_primary"
+      ],
+      "sex_in": [
+        "f"
+      ],
+      "age_gte": 40,
+      "has_mammography": false,
+      "metastatic_sites_intersect": [
+        "аксиллярные лимфатические узлы",
+        "подмышечные лимфатические узлы",
+        "надключичные лимфатические узлы",
+        "подключичные лимфатические узлы",
+        "медиастинальные лимфатические узлы",
+        "забрюшинные лимфатические узлы",
+        "печень",
+        "головной мозг",
+        "кости",
+        "множественные очаги"
+      ]
+    }
+  },
+  {
+    "id": "ddmj_screening_mammography_40_75",
+    "enabled": true,
+    "step_id": "ddmj_screening_mammography_40_75",
+    "conditions": {
+      "clinical_context_in": [
+        "screening"
+      ],
+      "sex_in": [
+        "f"
+      ],
+      "age_gte": 40,
+      "age_lt": 76,
+      "has_mammography": false
+    }
+  },
+  {
+    "id": "ddmj_palpable_mass_mammography",
+    "enabled": true,
+    "step_id": "ddmj_palpable_mass_mammography",
+    "conditions": {
+      "clinical_context_in": [
+        "palpable_mass"
+      ],
+      "has_mammography": false
+    }
+  },
+  {
+    "id": "ddmj_acr_cd_additional_imaging",
+    "enabled": true,
+    "step_id": "ddmj_acr_cd_additional_imaging",
+    "conditions": {
+      "any_acr_in": [
+        "C",
+        "D"
+      ]
+    }
+  },
+  {
+    "id": "ddmj_acr_cd_shorter_screening_interval",
+    "enabled": true,
+    "step_id": "ddmj_acr_cd_shorter_screening_interval",
+    "conditions": {
+      "clinical_context_in": [
+        "screening"
+      ],
+      "any_acr_in": [
+        "C",
+        "D"
+      ]
+    }
+  },
+  {
+    "id": "ddmj_birads_0_incomplete_assessment",
+    "enabled": true,
+    "step_id": "ddmj_birads_0_incomplete_assessment",
+    "conditions": {
+      "any_birads_in": [
+        0
+      ]
+    }
+  },
+  {
+    "id": "ddmj_birads_1_2_observation",
+    "enabled": true,
+    "step_id": "ddmj_birads_1_2_observation",
+    "conditions": {
+      "clinical_context_in": [
+        "screening",
+        "breast_pain",
+        "palpable_mass",
+        "nipple_discharge",
+        "skin_or_nipple_changes",
+        "abnormal_ultrasound",
+        "abnormal_previous_mammography"
+      ],
+      "all_birads_in": [
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "id": "ddmj_birads_3_six_month_followup",
+    "enabled": true,
+    "step_id": "ddmj_birads_3_six_month_followup",
+    "conditions": {
+      "any_birads_in": [
+        3
+      ]
+    }
+  },
+  {
+    "id": "ddmj_birads_3_oncology_consult",
+    "enabled": true,
+    "step_id": "ddmj_birads_3_oncology_consult",
+    "conditions": {
+      "any_birads_in": [
+        3
+      ]
+    }
+  },
+  {
+    "id": "ddmj_birads_4_5_biopsy",
+    "enabled": true,
+    "step_id": "ddmj_birads_4_5_biopsy",
+    "conditions": {
+      "any_birads_in": [
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "id": "ddmj_birads_4_5_oncology",
+    "enabled": true,
+    "step_id": "ddmj_birads_4_5_oncology",
+    "conditions": {
+      "any_birads_in": [
+        4,
+        5
+      ]
+    }
+  },
+  {
+    "id": "ddmj_birads_6_oncology",
+    "enabled": true,
+    "step_id": "ddmj_birads_6_oncology",
+    "conditions": {
+      "any_birads_in": [
+        6
+      ]
+    }
+  }
+]

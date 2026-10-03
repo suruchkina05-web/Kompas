@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Компас</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+<header class="hero">
+    <div class="hero__inner">
+        <h1>Компас</h1>
+        <p>
+            AI-маршрутизация пациента после лучевой диагностики:
+            следующий шаг, обоснование, исходные данные и источник правила.
+        </p>
+    </div>
+</header>
+
+<main class="wrap">
+
+    <section class="card">
+        <div class="section-head">
+            <div>
+                <h2>1. Выберите сценарий</h2>
+                <p class="hint">
+                    Запустите один из демонстрационных кейсов
+                    или загрузите собственный JSON-файл исследования.
+                </p>
+            </div>
+        </div>
+
+        <div id="demoGrid" class="demo-grid"></div>
+
+        <div class="upload-box">
+            <input
+                id="jsonFile"
+                type="file"
+                accept=".json,application/json"
+                hidden
+            >
+
+            <button
+                id="uploadButton"
+                type="button"
+                class="button button--secondary"
+            >
+                📂 Загрузить собственный JSON
+            </button>
+
+            <div id="fileName" class="hint upload-name"></div>
+        </div>
+
+        <div class="actions">
+            <button
+                id="runButton"
+                type="button"
+                class="button"
+                disabled
+            >
+                Построить маршрут
+            </button>
+
+            <button
+                id="resetButton"
+                type="button"
+                class="button button--secondary"
+            >
+                Сбросить
+            </button>
+        </div>
+
+        <div id="selectedCase" class="selected-case" hidden></div>
+        <button
+            id="showInputButton"
+            type="button"
+            class="button button--secondary"
+            hidden
+        >
+            👁 Посмотреть входной JSON
+        </button>
+
+        <details
+            id="inputJsonBox"
+            class="raw"
+            hidden
+        >
+            <summary>Входной JSON</summary>
+            <pre id="rawInput"></pre>
+        </details>
+        <div id="busy" class="busy"></div>
+        <div id="error" class="error"></div>
+    </section>
+
+
+    <section id="result" class="card" hidden>
+        <h2>2. Результат маршрутизации</h2>
+
+        <div class="status-row">
+            <span>Статус:</span>
+            <span id="status" class="status"></span>
+        </div>
+
+        <div id="warnings"></div>
+        <div id="missing"></div>
+
+        <h3>Рекомендации</h3>
+        <div id="recommendations"></div>
+
+        <details class="raw">
+            <summary>Технический JSON ответа</summary>
+            <pre id="rawResponse"></pre>
+        </details>
+    </section>
+
+</main>
+
+<footer class="footer">
+    Компас не анализирует медицинские изображения самостоятельно
+    и не заменяет врача. Сервис использует результат диагностической системы,
+    клинический контекст и переданную базу правил для формирования следующего шага.
+</footer>
+
+<script
+    type="module"
+    src="/static/app.js"
+></script>
+</body>
+</html>

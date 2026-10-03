@@ -1,0 +1,24 @@
+{
+  "studyIUID": "mock-no-guideline-001",
+  "modality": "CT",
+  "bodyPart": "CHEST",
+  "report": "Определяется правосторонний плевральный выпот объёмом около 320 мл.",
+  "conclusion": "КТ-признаки правостороннего плеврального выпота объёмом около 320 мл.",
+  "findings": [
+    {
+      "type": "pleural_effusion",
+      "side": "right",
+      "volume_ml": 320
+    }
+  ],
+  "patientContext": {
+    "age": 62
+  },
+  "knowledgeBaseContext": [
+    {
+      "sourceId": "DEMO-NODULE-ONLY-001",
+      "sourceType": "synthetic_demo_rule",
+      "text": "Правило относится только к solid_pulmonary_nodule размером более 10 мм."
+    }
+  ]
+}

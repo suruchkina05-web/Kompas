@@ -1,0 +1,26 @@
+{
+  "studyIUID": "mock-conflict-001",
+  "modality": "CT",
+  "bodyPart": "CHEST",
+  "report": "В S6 нижней доли левого лёгкого определяется солидный очаг размером 14.2 мм.",
+  "conclusion": "КТ-признаки солидного очага S6 нижней доли левого лёгкого размером 6 мм.",
+  "findings": [
+    {
+      "type": "solid_pulmonary_nodule",
+      "location": "S6 нижней доли левого лёгкого",
+      "size_mm": 14.2
+    }
+  ],
+  "patientContext": {
+    "age": 64,
+    "smokingHistory": "current_smoker",
+    "previousStudiesAvailable": true
+  },
+  "knowledgeBaseContext": [
+    {
+      "sourceId": "MOCK-GUIDELINE-CONFLICT",
+      "sourceType": "synthetic_test_rule",
+      "text": "Если размер солидного лёгочного очага более 10 мм, допускается specialist_consultation. Если входные источники содержат противоречащие размеры находки, автоматическая маршрутизация не выполняется."
+    }
+  ]
+}

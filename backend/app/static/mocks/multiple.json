@@ -1,0 +1,35 @@
+{
+  "studyIUID": "mock-multiple-001",
+  "modality": "CT",
+  "bodyPart": "CHEST",
+  "report": "В правом лёгком определяется солидный очаг размером 15 мм. Также определяется правосторонний плевральный выпот объёмом около 320 мл.",
+  "conclusion": "КТ-признаки солидного лёгочного очага размером 15 мм и правостороннего плеврального выпота объёмом около 320 мл.",
+  "findings": [
+    {
+      "type": "solid_pulmonary_nodule",
+      "size_mm": 15
+    },
+    {
+      "type": "pleural_effusion",
+      "side": "right",
+      "volume_ml": 320
+    }
+  ],
+  "patientContext": {
+    "age": 66,
+    "smokingHistory": "former_smoker",
+    "previousStudiesAvailable": true
+  },
+  "knowledgeBaseContext": [
+    {
+      "sourceId": "DEMO-NODULE-RULE-001",
+      "sourceType": "synthetic_demo_rule",
+      "text": "Если выявлен solid_pulmonary_nodule размером более 10 мм у пациента 60 лет или старше и smokingHistory известно, сформировать specialist_consultation. target: Специалист по заболеваниям органов грудной клетки. priority: high."
+    },
+    {
+      "sourceId": "DEMO-EFFUSION-RULE-001",
+      "sourceType": "synthetic_demo_rule",
+      "text": "Если выявлен pleural_effusion объёмом 300 мл или более, сформировать physician_review. priority: medium."
+    }
+  ]
+}
