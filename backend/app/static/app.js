@@ -32,14 +32,6 @@ function renderDemoGrid() {
         button.className = "demo-card";
         button.dataset.key = demo.key;
 
-        const icon =
-            document.createElement("span");
-
-        icon.className =
-            "demo-card__icon";
-
-        icon.textContent =
-            demo.icon;
 
         const title =
             document.createElement("strong");
@@ -57,7 +49,6 @@ function renderDemoGrid() {
             demo.description;
 
         button.append(
-            icon,
             title,
             desc
         );
@@ -87,17 +78,8 @@ function renderDemoGrid() {
                     $("runButton").disabled =
                         false;
 
-                    $("showInputButton").hidden =
-                        false;
-
                     $("jsonFile").value = "";
                     $("fileName").textContent = "";
-
-                    $("inputJsonBox").hidden =
-                        true;
-
-                    $("rawInput").textContent =
-                        "";
 
                     $("error").textContent =
                         "";
@@ -108,15 +90,6 @@ function renderDemoGrid() {
                     $("runButton").disabled =
                         true;
 
-                    $("showInputButton").hidden =
-                        true;
-
-                    $("inputJsonBox").hidden =
-                        true;
-
-                    $("rawInput").textContent =
-                        "";
-
                     $("error").textContent =
                         "Не удалось загрузить сценарий: " +
                         error.message;
@@ -126,27 +99,6 @@ function renderDemoGrid() {
 
         root.appendChild(button);
     });
-}
-
-
-/* =========================================================
-   INPUT JSON VIEW
-   ========================================================= */
-
-function toggleInputJson() {
-    if (!selectedPayload) {
-        return;
-    }
-
-    $("rawInput").textContent =
-        JSON.stringify(
-            selectedPayload,
-            null,
-            2
-        );
-
-    $("inputJsonBox").hidden =
-        !$("inputJsonBox").hidden;
 }
 
 
@@ -199,15 +151,6 @@ async function handleFileUpload(event) {
         $("runButton").disabled =
             false;
 
-        $("showInputButton").hidden =
-            false;
-
-        $("inputJsonBox").hidden =
-            true;
-
-        $("rawInput").textContent =
-            "";
-
         $("error").textContent =
             "";
 
@@ -216,15 +159,6 @@ async function handleFileUpload(event) {
 
         $("runButton").disabled =
             true;
-
-        $("showInputButton").hidden =
-            true;
-
-        $("inputJsonBox").hidden =
-            true;
-
-        $("rawInput").textContent =
-            "";
 
         $("error").textContent =
             "Не удалось загрузить JSON: " +
@@ -258,7 +192,8 @@ async function runRouting() {
             );
 
         renderResult(
-            result
+            result,
+            selectedPayload
         );
 
     } catch (error) {
@@ -298,15 +233,6 @@ function resetApp() {
     $("selectedCase").textContent =
         "";
 
-    $("showInputButton").hidden =
-        true;
-
-    $("inputJsonBox").hidden =
-        true;
-
-    $("rawInput").textContent =
-        "";
-
     $("result").hidden =
         true;
 
@@ -338,11 +264,6 @@ $("jsonFile").addEventListener(
     handleFileUpload
 );
 
-$("showInputButton").addEventListener(
-    "click",
-    toggleInputJson
-);
-
 $("runButton").addEventListener(
     "click",
     runRouting
@@ -354,8 +275,62 @@ $("resetButton").addEventListener(
 );
 
 
+
+/* =========================================================
+   RESULT VIEW TABS
+   ========================================================= */
+
+function switchResultView(view) {
+    document
+        .querySelectorAll(".view-tab")
+        .forEach(tab => {
+            const active = tab.dataset.view === view;
+            tab.classList.toggle("is-active", active);
+            tab.setAttribute("aria-selected", String(active));
+        });
+
+    document
+        .querySelectorAll(".view-panel")
+        .forEach(panel => {
+            panel.hidden = panel.dataset.panel !== view;
+        });
+}
+
+document
+    .querySelectorAll(".view-tab")
+    .forEach(tab => {
+        tab.addEventListener("click", () => switchResultView(tab.dataset.view));
+    });
+
+
+/* =========================================================
+   THEME
+   ========================================================= */
+
+function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem("kompas-theme", theme);
+
+    const toggle = $("themeToggle");
+    if (toggle) {
+        toggle.textContent = theme === "dark" ? "Светлая тема" : "Тёмная тема";
+    }
+}
+
+function initTheme() {
+    const saved = localStorage.getItem("kompas-theme");
+    const preferred = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    applyTheme(saved || preferred);
+
+    $("themeToggle")?.addEventListener("click", () => {
+        const current = document.documentElement.dataset.theme || "light";
+        applyTheme(current === "dark" ? "light" : "dark");
+    });
+}
+
 /* =========================================================
    INIT
    ========================================================= */
 
+initTheme();
 renderDemoGrid();

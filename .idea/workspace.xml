@@ -5,8 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="eb37118c-d732-462c-96bc-69619f48b5ec" name="Changes" comment="коммиты">
-      <change beforePath="$PROJECT_DIR$/.idea/Kompas.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Kompas.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/Dockerfile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/kafka/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/kafka/config.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/kafka/producer.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/kafka/worker.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/routing_models.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/app/routing_service.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/docker-compose.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/scripts/kafka_read.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/scripts/kafka_send_test.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/test_kafka_payload.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/static/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/static/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/static/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/static/js/demos.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/static/js/demos.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/static/js/labels.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/static/js/labels.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/static/js/render.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/static/js/render.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/app/static/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/backend/app/static/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/backend/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -14,12 +33,12 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="4" />
+    <option name="cachedIndexableFilesCount" value="56" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="feature/backend-init" />
+        <entry key="$PROJECT_DIR$" value="front-lina" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -42,61 +61,61 @@
   </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.0000062211881737" />
-      <entry key="MS500" value="1.179013081611738" />
-      <entry key="S2" value="3.0887825402148947" />
-      <entry key="S5" value="4.864141408525645" />
-      <entry key="S10" value="5.80199096580547" />
-      <entry key="S30" value="6.806766504743588" />
-      <entry key="S60" value="7.861417942137062" />
-      <entry key="M2" value="10.297250829626842" />
-      <entry key="M5" value="17.987769536030427" />
-      <entry key="M10" value="25.702354481447898" />
-      <entry key="M15" value="29.737170357684725" />
-      <entry key="M30" value="36.16742429075349" />
-      <entry key="H1" value="48.21185870962568" />
-      <entry key="H2" value="73.01033035035366" />
-      <entry key="H4" value="103.35475435962324" />
-      <entry key="D1" value="149.98830658730427" />
-      <entry key="W1" value="161.04690865081244" />
+      <entry key="MS100" value="1.2871745887492658" />
+      <entry key="MS500" value="1.782498384074111" />
+      <entry key="S2" value="3.0051526562074855" />
+      <entry key="S5" value="6.125998668383448" />
+      <entry key="S10" value="8.694223802294772" />
+      <entry key="S30" value="11.307499128813289" />
+      <entry key="S60" value="12.161758735641342" />
+      <entry key="M2" value="13.67922874289385" />
+      <entry key="M5" value="21.855268753859296" />
+      <entry key="M10" value="32.773489104218996" />
+      <entry key="M15" value="41.000194572716815" />
+      <entry key="M30" value="57.836473798792696" />
+      <entry key="H1" value="78.69224948213828" />
+      <entry key="H2" value="109.15517935822" />
+      <entry key="H4" value="144.96239651807352" />
+      <entry key="D1" value="201.7221227254649" />
+      <entry key="W1" value="215.5447623139278" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
       <entry key="MS500" value="0.0" />
-      <entry key="S2" value="2.7521829876802535E-100" />
-      <entry key="S5" value="1.7130102362699044E-40" />
-      <entry key="S10" value="1.6900433920098405E-20" />
-      <entry key="S30" value="3.975828733985844E-7" />
-      <entry key="S60" value="8.88887079947589E-4" />
-      <entry key="M2" value="0.04212993605118333" />
-      <entry key="M5" value="0.42694388478447226" />
-      <entry key="M10" value="0.9240308517889644" />
-      <entry key="M15" value="1.195265961299978" />
-      <entry key="M30" value="1.546129001333971" />
-      <entry key="H1" value="1.758480165971696" />
-      <entry key="H2" value="1.875355637115416" />
-      <entry key="H4" value="1.9366752068001931" />
-      <entry key="D1" value="1.9893038592250722" />
-      <entry key="W1" value="1.9984684656032274" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="2.94460904479414E-191" />
+      <entry key="S10" value="7.006993217418824E-96" />
+      <entry key="S30" value="2.9646421712585596E-32" />
+      <entry key="S60" value="2.427274540891732E-16" />
+      <entry key="M2" value="2.2015418897629918E-8" />
+      <entry key="M5" value="0.0013110681249505728" />
+      <entry key="M10" value="0.0512051570509678" />
+      <entry key="M15" value="0.17373315465730144" />
+      <entry key="M30" value="0.5894606292442792" />
+      <entry key="H1" value="1.0857804374535487" />
+      <entry key="H2" value="1.4736213583548723" />
+      <entry key="H4" value="1.7167534443157442" />
+      <entry key="D1" value="1.9497382611933436" />
+      <entry key="W1" value="1.9927411921471885" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.0012507391817862654" />
-      <entry key="MS500" value="0.44044570786380605" />
-      <entry key="S2" value="2.801479019610957" />
-      <entry key="S5" value="4.736635558405709" />
-      <entry key="S10" value="5.7358245729666715" />
-      <entry key="S30" value="6.7823636305741415" />
-      <entry key="S60" value="7.847367231427038" />
-      <entry key="M2" value="10.32895079920757" />
-      <entry key="M5" value="18.406785017388913" />
-      <entry key="M10" value="26.620498133830065" />
-      <entry key="M15" value="30.927840667233585" />
-      <entry key="M30" value="37.71077968204748" />
-      <entry key="H1" value="49.96873419324863" />
-      <entry key="H2" value="74.88477997179794" />
-      <entry key="H4" value="105.2909350738564" />
-      <entry key="D1" value="151.97751980615425" />
-      <entry key="W1" value="163.0453639208061" />
+      <entry key="MS100" value="0.9039829662300736" />
+      <entry key="MS500" value="1.6873092159892142" />
+      <entry key="S2" value="2.9772643994923973" />
+      <entry key="S5" value="6.1112199753951195" />
+      <entry key="S10" value="8.68534733217768" />
+      <entry key="S30" value="11.30403474137127" />
+      <entry key="S60" value="12.15984474418356" />
+      <entry key="M2" value="13.67758886286314" />
+      <entry key="M5" value="21.854630774459615" />
+      <entry key="M10" value="32.82273533950972" />
+      <entry key="M15" value="41.171908204922026" />
+      <entry key="M30" value="58.42399862554784" />
+      <entry key="H1" value="79.7765247771452" />
+      <entry key="H2" value="110.62780801238941" />
+      <entry key="H4" value="146.67856456452498" />
+      <entry key="D1" value="203.67174663787537" />
+      <entry key="W1" value="217.53748667825332" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -108,30 +127,33 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/angelinahandozko/Documents/Kompas&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "develop",
+    "junie.onboarding.icon.badge.shown": "true",
+    "last_opened_file_path": "/Users/angelinahandozko/Documents/Kompas/backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "to.speed.mode.migration.done": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/backend/app/static" />
+      <recent name="$PROJECT_DIR$/backend/app" />
+      <recent name="$PROJECT_DIR$/backend/app/static 2" />
+      <recent name="$PROJECT_DIR$/backend/app/static 2/mocks" />
       <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/backend" />
     </key>
   </component>
   <component name="SharedIndexes">
@@ -173,7 +195,15 @@
       <option name="project" value="LOCAL" />
       <updated>1791037623114</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="коммиты">
+      <option name="closed" value="true" />
+      <created>1791110591678</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1791110591678</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

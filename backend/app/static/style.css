@@ -360,3 +360,1092 @@ pre {
         padding: 16px;
     }
 }
+
+/* =========================================================
+   THREE AUDIENCE VIEWS
+   ========================================================= */
+.hero__eyebrow {
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    opacity: .82;
+}
+
+.result-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.section-kicker {
+    margin-bottom: 4px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.status-row--compact {
+    margin-top: 2px;
+}
+
+.view-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    padding: 6px;
+    background: #f3f5fa;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+}
+
+.view-tab {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 70px;
+    padding: 12px 14px;
+    text-align: left;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: .16s ease;
+}
+
+.view-tab:hover {
+    background: rgba(255,255,255,.72);
+}
+
+.view-tab.is-active {
+    background: #fff;
+    border-color: #dfe3ec;
+    box-shadow: 0 3px 12px rgba(30, 42, 58, .07);
+}
+
+.view-tab__icon {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    font-size: 19px;
+    background: #eef2ff;
+    border-radius: 10px;
+}
+
+.view-tab strong,
+.view-tab small {
+    display: block;
+}
+
+.view-tab strong {
+    font-size: 14px;
+}
+
+.view-tab small {
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.view-panel {
+    padding-top: 18px;
+}
+
+.audience-intro {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
+.audience-intro strong {
+    display: block;
+    font-size: 14px;
+}
+
+.audience-intro p {
+    margin: 3px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.audience-intro--patient { background: #f7fffb; }
+.audience-intro--doctor { background: #f8f9ff; }
+.audience-intro--system { background: #fafafa; }
+
+.recommendation--patient {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 20px;
+    background: linear-gradient(180deg, #ffffff, #fbfcff);
+}
+
+.recommendation__icon--patient {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    background: #eef2ff;
+    border-radius: 13px;
+}
+
+.recommendation__title--patient {
+    font-size: 18px;
+}
+
+.reason--patient {
+    max-width: 760px;
+    font-size: 15px;
+    line-height: 1.65;
+}
+
+.badge--soft {
+    color: #344054;
+    background: #f2f4f7;
+}
+
+.badge--urgent,
+.badge--high {
+    color: #991b1b;
+    background: #fee2e2;
+}
+
+.badge--medium {
+    color: #92400e;
+    background: #fef3c7;
+}
+
+.badge--low {
+    color: #166534;
+    background: #dcfce7;
+}
+
+.patient-note {
+    margin-top: 16px;
+    padding: 12px 14px;
+    color: var(--muted);
+    font-size: 12px;
+    background: #f8fafc;
+    border-radius: 10px;
+}
+
+.pipeline {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0;
+}
+
+.pipeline__step {
+    min-height: 92px;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
+.pipeline__step > span {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    margin-bottom: 8px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 800;
+    background: var(--brand);
+    border-radius: 50%;
+}
+
+.pipeline__step strong,
+.pipeline__step small {
+    display: block;
+}
+
+.pipeline__step strong {
+    font-size: 13px;
+}
+
+.pipeline__step small {
+    margin-top: 3px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.pipeline__arrow {
+    color: #98a2b3;
+    font-size: 18px;
+}
+
+.system-source-box {
+    margin: 14px 0;
+    padding: 14px;
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
+.system-source-box > strong {
+    font-size: 12px;
+}
+
+.source-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.source-chip {
+    padding: 4px 8px;
+    color: #475467;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    background: #fff;
+    border: 1px solid #dfe3e8;
+    border-radius: 8px;
+}
+
+@media(max-width: 800px) {
+    .view-tabs {
+        grid-template-columns: 1fr;
+    }
+
+    .pipeline {
+        grid-template-columns: 1fr;
+    }
+
+    .pipeline__arrow {
+        transform: rotate(90deg);
+        text-align: center;
+    }
+
+    .result-heading {
+        flex-direction: column;
+    }
+}
+
+.patient-doctor-box {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 12px 0 10px;
+    padding: 10px 14px;
+    background: #eef4ff;
+    border: 1px solid #d8e3ff;
+    border-radius: 12px;
+    flex-wrap: wrap;
+}
+
+.patient-doctor-box__label {
+    color: #475467;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.patient-doctor-box__value {
+    color: #1d4ed8;
+    font-size: 14px;
+    font-weight: 700;
+    background: #ffffff;
+    border: 1px solid #dbeafe;
+    border-radius: 999px;
+    padding: 6px 12px;
+}
+
+
+/* =========================================================
+   ICON-FREE UI + THEME
+   ========================================================= */
+
+.hero__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 6px;
+}
+
+.theme-toggle {
+    padding: 8px 12px;
+    color: inherit;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, .14);
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-radius: 999px;
+    cursor: pointer;
+}
+
+.theme-toggle:hover {
+    background: rgba(255, 255, 255, .22);
+}
+
+.view-tab {
+    align-items: center;
+}
+
+.recommendation--patient {
+    display: block;
+}
+
+.patient-doctor-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    max-width: 620px;
+    margin: 14px 0 10px;
+    padding: 12px 14px;
+    background: #eef4ff;
+    border: 1px solid #d8e3ff;
+    border-radius: 12px;
+}
+
+.patient-doctor-box__label {
+    color: #667085;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.patient-doctor-box__value {
+    color: #1d4ed8;
+    font-size: 14px;
+    font-weight: 800;
+    text-align: right;
+}
+
+.reason--patient {
+    color: #475467;
+}
+
+:root[data-theme="dark"] {
+    --ink: #eef2f7;
+    --muted: #a9b3c3;
+    --line: #2b3443;
+    --bg: #0d1117;
+    --card: #151b23;
+    --brand: #6366f1;
+    --brand2: #0891b2;
+    --ok: #4ade80;
+    --warn: #fbbf24;
+    --bad: #f87171;
+}
+
+:root[data-theme="dark"] body {
+    background: var(--bg);
+    color: var(--ink);
+}
+
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .recommendation,
+:root[data-theme="dark"] .recommendation--patient,
+:root[data-theme="dark"] .pipeline__step,
+:root[data-theme="dark"] .view-tab.is-active,
+:root[data-theme="dark"] .source-chip {
+    background: #151b23;
+    color: var(--ink);
+}
+
+:root[data-theme="dark"] .view-tabs,
+:root[data-theme="dark"] .system-source-box,
+:root[data-theme="dark"] .patient-note,
+:root[data-theme="dark"] .audience-intro--system,
+:root[data-theme="dark"] .audience-intro--doctor,
+:root[data-theme="dark"] .audience-intro--patient,
+:root[data-theme="dark"] .evidence,
+:root[data-theme="dark"] .selected-case,
+:root[data-theme="dark"] .raw,
+:root[data-theme="dark"] pre {
+    background: #111720;
+    color: var(--ink);
+}
+
+:root[data-theme="dark"] .view-tab:hover {
+    background: #1b2330;
+}
+
+:root[data-theme="dark"] .view-tab.is-active {
+    border-color: #415069;
+    box-shadow: 0 0 0 1px rgba(99, 102, 241, .22), 0 4px 18px rgba(0, 0, 0, .2);
+}
+
+:root[data-theme="dark"] .button--secondary,
+:root[data-theme="dark"] .demo-card,
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] textarea {
+    color: var(--ink);
+    background: #111720;
+    border-color: #344054;
+}
+
+:root[data-theme="dark"] .demo-card:hover,
+:root[data-theme="dark"] .demo-card.selected {
+    background: #1a2230;
+}
+
+:root[data-theme="dark"] .patient-doctor-box {
+    background: #17213a;
+    border-color: #2d4372;
+}
+
+:root[data-theme="dark"] .patient-doctor-box__label,
+:root[data-theme="dark"] .reason--patient,
+:root[data-theme="dark"] .hint,
+:root[data-theme="dark"] .view-tab small,
+:root[data-theme="dark"] .audience-intro p,
+:root[data-theme="dark"] .pipeline__step small,
+:root[data-theme="dark"] .footer,
+:root[data-theme="dark"] .source {
+    color: var(--muted);
+}
+
+:root[data-theme="dark"] .patient-doctor-box__value {
+    color: #93c5fd;
+}
+
+:root[data-theme="dark"] .badge--soft,
+:root[data-theme="dark"] .badge {
+    color: #d5dbea;
+    background: #222b38;
+}
+
+:root[data-theme="dark"] .badge--urgent,
+:root[data-theme="dark"] .badge--high {
+    color: #fecaca;
+    background: #4c1d1d;
+}
+
+:root[data-theme="dark"] .badge--medium {
+    color: #fde68a;
+    background: #45320f;
+}
+
+:root[data-theme="dark"] .badge--low {
+    color: #bbf7d0;
+    background: #16351f;
+}
+
+@media(max-width: 640px) {
+    .hero__top,
+    .patient-doctor-box {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .patient-doctor-box__value {
+        text-align: left;
+    }
+}
+
+/* =========================================================
+   DARK THEME — COMPASS NIGHT UI
+   Inspired by the provided visual reference.
+   Light theme remains unchanged.
+   ========================================================= */
+
+:root[data-theme="dark"] {
+    --ink: #f8fafc;
+    --muted: #b8c2d1;
+    --line: #2b3548;
+    --bg: #080d16;
+    --card: #182033;
+    --brand: #2f80ff;
+    --brand2: #8b5cf6;
+    --brand3: #ff4d8d;
+    --ok: #4ade80;
+    --warn: #fbbf24;
+    --bad: #fb7185;
+}
+
+:root[data-theme="dark"] body {
+    color: #f8fafc;
+    background:
+        radial-gradient(circle at 82% 4%, rgba(35, 93, 180, .13), transparent 30%),
+        linear-gradient(180deg, #090f1a 0%, #080d16 100%);
+}
+
+/* Header / COMPASS plaque */
+:root[data-theme="dark"] .hero {
+    position: relative;
+    color: #ffffff;
+    background:
+        radial-gradient(circle at 88% 18%, rgba(39, 105, 210, .22), transparent 30%),
+        linear-gradient(110deg, #0d1729 0%, #101827 52%, #0c1422 100%);
+    border-bottom: 1px solid #263149;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, .22);
+}
+
+:root[data-theme="dark"] .hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #2f80ff 0%, #4868ff 38%, #9b5cff 67%, #ff4d8d 100%);
+}
+
+:root[data-theme="dark"] .hero h1 {
+    display: inline-block;
+    color: transparent;
+    background: linear-gradient(90deg, #ffffff 0%, #d9e7ff 28%, #8db7ff 55%, #aa8cff 75%, #ff7aac 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 28px rgba(81, 124, 255, .14);
+}
+
+:root[data-theme="dark"] .hero__eyebrow {
+    color: #8db7ff;
+    opacity: 1;
+}
+
+:root[data-theme="dark"] .hero p {
+    color: #c5ccda;
+    opacity: 1;
+}
+
+:root[data-theme="dark"] .theme-toggle {
+    color: #ffffff;
+    background: rgba(20, 30, 49, .78);
+    border-color: #40506d;
+}
+
+:root[data-theme="dark"] .theme-toggle:hover {
+    background: rgba(42, 56, 84, .94);
+    border-color: #6485c5;
+}
+
+/* Main surfaces */
+:root[data-theme="dark"] .card {
+    color: #ffffff;
+    background: linear-gradient(180deg, #1a2236 0%, #171f31 100%);
+    border: 1px solid #2a354b;
+    box-shadow: 0 16px 44px rgba(0, 0, 0, .22);
+}
+
+/* Explicit white / high-contrast typography in dark mode */
+:root[data-theme="dark"] h1,
+:root[data-theme="dark"] h2,
+:root[data-theme="dark"] h3,
+:root[data-theme="dark"] strong,
+:root[data-theme="dark"] .recommendation__title,
+:root[data-theme="dark"] .recommendation__title--patient,
+:root[data-theme="dark"] .view-tab strong,
+:root[data-theme="dark"] .demo-card strong,
+:root[data-theme="dark"] .selected-case,
+:root[data-theme="dark"] .pipeline__step strong,
+:root[data-theme="dark"] summary {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .hint,
+:root[data-theme="dark"] .demo-card__desc,
+:root[data-theme="dark"] .view-tab small,
+:root[data-theme="dark"] .audience-intro p,
+:root[data-theme="dark"] .pipeline__step small,
+:root[data-theme="dark"] .footer,
+:root[data-theme="dark"] .source,
+:root[data-theme="dark"] .section-kicker,
+:root[data-theme="dark"] .patient-doctor-box__label {
+    color: #b8c2d1;
+}
+
+:root[data-theme="dark"] .reason,
+:root[data-theme="dark"] .reason--patient,
+:root[data-theme="dark"] .evidence,
+:root[data-theme="dark"] .evidence li,
+:root[data-theme="dark"] .patient-note,
+:root[data-theme="dark"] .alert {
+    color: #eef2f8;
+}
+
+/* Scenario cards: dark + gradient hover/selection */
+:root[data-theme="dark"] .demo-card {
+    color: #ffffff;
+    background:
+        linear-gradient(#131b2a, #131b2a) padding-box,
+        linear-gradient(120deg, #2c374d, #2c374d) border-box;
+    border: 1px solid transparent;
+    box-shadow: none;
+    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+
+:root[data-theme="dark"] .demo-card:hover {
+    color: #ffffff;
+    background:
+        linear-gradient(120deg, rgba(34, 48, 75, .98), rgba(25, 33, 54, .98)) padding-box,
+        linear-gradient(110deg, #2f80ff 0%, #6d5dfc 56%, #ff4d8d 100%) border-box;
+    box-shadow:
+        0 0 0 1px rgba(72, 110, 255, .18),
+        0 10px 28px rgba(34, 74, 165, .20),
+        0 0 28px rgba(122, 82, 255, .10);
+    transform: translateY(-2px);
+}
+
+:root[data-theme="dark"] .demo-card.selected {
+    color: #ffffff;
+    background:
+        linear-gradient(120deg, rgba(31, 47, 78, .98), rgba(26, 34, 57, .98)) padding-box,
+        linear-gradient(110deg, #2584ff 0%, #695cff 55%, #ff4d8d 100%) border-box;
+    box-shadow:
+        0 0 0 1px rgba(48, 128, 255, .22),
+        0 0 24px rgba(67, 112, 255, .22);
+}
+
+/* Upload zone */
+:root[data-theme="dark"] .upload-box {
+    background: rgba(24, 35, 57, .72);
+    border-color: #35445e;
+}
+
+/* Primary button gets the same product gradient */
+:root[data-theme="dark"] .button:not(.button--secondary) {
+    color: #ffffff;
+    background: linear-gradient(100deg, #2f80ff 0%, #5b67ff 55%, #9a5cff 100%);
+    box-shadow: 0 8px 22px rgba(47, 128, 255, .18);
+}
+
+:root[data-theme="dark"] .button:not(.button--secondary):hover {
+    filter: none;
+    background: linear-gradient(100deg, #4590ff 0%, #726fff 55%, #ad6bff 100%);
+    box-shadow: 0 10px 28px rgba(67, 115, 255, .28);
+}
+
+:root[data-theme="dark"] .button--secondary {
+    color: #ffffff;
+    background: #111a29;
+    border: 1px solid #35445e;
+}
+
+:root[data-theme="dark"] .button--secondary:hover {
+    background: #1b2638;
+    border-color: #52678a;
+}
+
+/* Three result views */
+:root[data-theme="dark"] .view-tabs {
+    background: #111827;
+    border-color: #2b3548;
+}
+
+:root[data-theme="dark"] .view-tab {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .view-tab:hover {
+    color: #ffffff;
+    background:
+        linear-gradient(#172135, #172135) padding-box,
+        linear-gradient(110deg, #2f80ff, #795cff, #ff4d8d) border-box;
+    border: 1px solid transparent;
+}
+
+:root[data-theme="dark"] .view-tab.is-active {
+    color: #ffffff;
+    background:
+        linear-gradient(#18243a, #18243a) padding-box,
+        linear-gradient(110deg, #2f80ff 0%, #765cff 60%, #ff4d8d 100%) border-box;
+    border: 1px solid transparent;
+    box-shadow: 0 8px 24px rgba(47, 128, 255, .13);
+}
+
+/* Result cards / technical panels */
+:root[data-theme="dark"] .recommendation,
+:root[data-theme="dark"] .recommendation--patient,
+:root[data-theme="dark"] .pipeline__step,
+:root[data-theme="dark"] .source-chip {
+    color: #ffffff;
+    background: #121a29;
+    border-color: #2d394f;
+}
+
+:root[data-theme="dark"] .audience-intro--patient,
+:root[data-theme="dark"] .audience-intro--doctor,
+:root[data-theme="dark"] .audience-intro--system,
+:root[data-theme="dark"] .system-source-box,
+:root[data-theme="dark"] .patient-note,
+:root[data-theme="dark"] .evidence,
+:root[data-theme="dark"] .selected-case,
+:root[data-theme="dark"] .raw,
+:root[data-theme="dark"] pre {
+    color: #eef2f8;
+    background: #0f1725;
+    border-color: #2c374a;
+}
+
+:root[data-theme="dark"] .evidence strong {
+    color: #8db7ff;
+}
+
+:root[data-theme="dark"] .patient-doctor-box {
+    background: linear-gradient(110deg, rgba(29, 51, 88, .82), rgba(34, 31, 70, .72));
+    border-color: #40547b;
+}
+
+:root[data-theme="dark"] .patient-doctor-box__value {
+    color: #ffffff;
+}
+
+/* Inputs */
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] textarea {
+    color: #ffffff;
+    background: #0e1624;
+    border-color: #34425a;
+}
+
+:root[data-theme="dark"] input::placeholder,
+:root[data-theme="dark"] textarea::placeholder {
+    color: #7f8ba0;
+}
+
+
+/* =========================================================
+   DARK THEME — HEADER + UPLOAD FIX
+   ========================================================= */
+
+/* In dark mode the header must stay dark, not blue. */
+:root[data-theme="dark"] .hero {
+    color: #ffffff;
+    background:
+        radial-gradient(circle at 85% 15%, rgba(47, 128, 255, .16), transparent 32%),
+        radial-gradient(circle at 12% 0%, rgba(139, 92, 246, .10), transparent 28%),
+        linear-gradient(180deg, #0f1728 0%, #0b1120 100%);
+    border-top: 2px solid transparent;
+    border-image: linear-gradient(90deg, #2f80ff, #7c5cff, #ff4d8d) 1;
+}
+
+:root[data-theme="dark"] .hero h1 {
+    color: transparent;
+    background: linear-gradient(90deg, #ffffff 0%, #c7d2fe 40%, #93c5fd 72%, #c084fc 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+:root[data-theme="dark"] .hero__eyebrow {
+    color: #a9b9d3;
+}
+
+:root[data-theme="dark"] .hero p {
+    color: #d7deea;
+    opacity: 1;
+}
+
+/* Remove the light upload strip in dark mode. */
+:root[data-theme="dark"] .upload-box {
+    color: #ffffff;
+    background: #121a29 !important;
+    border: 1px dashed #35445e;
+}
+
+:root[data-theme="dark"] .upload-box:hover {
+    background: #151f31 !important;
+    border-color: #52678a;
+}
+
+:root[data-theme="dark"] .upload-name {
+    color: #93c5fd;
+}
+
+:root[data-theme="dark"] .upload-box .button--secondary {
+    color: #ffffff;
+    background: #111827;
+    border-color: #3a465b;
+}
+
+:root[data-theme="dark"] .upload-box .button--secondary:hover {
+    background: #1a2435;
+    border-color: #5a6b87;
+}
+
+
+/* =========================================================
+   DARK THEME — READABILITY FIX
+   Fixes warning cards and doctor target pill contrast.
+   ========================================================= */
+
+:root[data-theme="dark"] .alert {
+    color: #f8fafc !important;
+}
+
+:root[data-theme="dark"] .alert strong,
+:root[data-theme="dark"] .alert li {
+    color: #f8fafc !important;
+}
+
+/* Warning: dark amber surface instead of pale yellow */
+:root[data-theme="dark"] .alert--warn {
+    background: rgba(120, 75, 8, 0.28) !important;
+    border: 1px solid rgba(251, 191, 36, 0.48) !important;
+    box-shadow: inset 3px 0 0 #fbbf24;
+}
+
+:root[data-theme="dark"] .alert--warn strong {
+    color: #fde68a !important;
+}
+
+/* Error/critical: dark red surface instead of pale pink */
+:root[data-theme="dark"] .alert--bad {
+    background: rgba(127, 29, 29, 0.28) !important;
+    border: 1px solid rgba(248, 113, 113, 0.48) !important;
+    box-shadow: inset 3px 0 0 #f87171;
+}
+
+:root[data-theme="dark"] .alert--bad strong {
+    color: #fecaca !important;
+}
+
+/* Patient "who to contact" panel */
+:root[data-theme="dark"] .patient-doctor-box {
+    background:
+        linear-gradient(110deg, rgba(31, 49, 82, .92), rgba(32, 28, 67, .82)) !important;
+    border: 1px solid #40547b !important;
+}
+
+:root[data-theme="dark"] .patient-doctor-box__label {
+    color: #cbd5e1 !important;
+}
+
+:root[data-theme="dark"] .patient-doctor-box__value {
+    color: #f8fafc !important;
+    background: #263552 !important;
+    border: 1px solid #526a96 !important;
+    box-shadow: none !important;
+}
+
+/* Empty state and patient explanatory copy */
+:root[data-theme="dark"] .empty {
+    color: #c7d0df !important;
+}
+
+:root[data-theme="dark"] .reason--patient {
+    color: #eef2f8 !important;
+}
+
+/* Keep the selected result tab readable */
+:root[data-theme="dark"] .view-tab.is-active small {
+    color: #c7d7f5 !important;
+}
+
+
+/* =========================================================
+   HOTFIX: patient target pill in dark theme
+   Strong selectors intentionally override older duplicated rules.
+   ========================================================= */
+html[data-theme="dark"] body .patient-doctor-box .patient-doctor-box__value,
+html[data-theme="dark"] body .patient-doctor-box > span:last-child {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: #263552 !important;
+    background-color: #263552 !important;
+    border: 1px solid #526a96 !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+}
+
+html[data-theme="dark"] body .patient-doctor-box .patient-doctor-box__label,
+html[data-theme="dark"] body .patient-doctor-box > span:first-child {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+}
+
+html[data-theme="dark"] body .patient-doctor-box {
+    background: linear-gradient(
+        110deg,
+        rgba(31, 49, 82, .92),
+        rgba(32, 28, 67, .82)
+    ) !important;
+    border-color: #40547b !important;
+}
+
+
+/* =========================================================
+   FINAL DARK MODE FIX — warning/missing-data contrast
+   ========================================================= */
+
+/* Main warning card in Patient view */
+html[data-theme="dark"] body .alert.alert--warn,
+html[data-theme="dark"] body #patientWarnings .alert,
+html[data-theme="dark"] body #missing .alert {
+    background: #111827 !important;
+    background-color: #111827 !important;
+    background-image: none !important;
+    border: 1px solid #334155 !important;
+    box-shadow: inset 3px 0 0 #f59e0b !important;
+    color: #f8fafc !important;
+}
+
+/* Every text node inside the warning card */
+html[data-theme="dark"] body .alert.alert--warn *,
+html[data-theme="dark"] body #patientWarnings .alert *,
+html[data-theme="dark"] body #missing .alert * {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    opacity: 1 !important;
+}
+
+html[data-theme="dark"] body .alert.alert--warn strong,
+html[data-theme="dark"] body #patientWarnings .alert strong,
+html[data-theme="dark"] body #missing .alert strong {
+    color: #fbbf24 !important;
+    -webkit-text-fill-color: #fbbf24 !important;
+}
+
+/* "Недостаточно данных" status pill */
+html[data-theme="dark"] body .status--needs_context,
+html[data-theme="dark"] body .status--missing_data,
+html[data-theme="dark"] body .status--incomplete {
+    background: #3f2c0d !important;
+    color: #fde68a !important;
+    border: 1px solid #7c5a16 !important;
+}
+
+/* Fallback: any warning box inside result section */
+html[data-theme="dark"] body #result .alert--warn {
+    background: #111827 !important;
+    background-image: none !important;
+    color: #f8fafc !important;
+    border-color: #334155 !important;
+}
+
+
+/* =========================================================
+   DOCTOR VIEW — structured clinical presentation
+   ========================================================= */
+
+.recommendation--doctor {
+    padding: 20px 22px;
+}
+
+.doctor-analysis {
+    display: grid;
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.doctor-analysis__block {
+    padding: 14px 16px;
+    background: #f8fafc;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
+.doctor-analysis__label {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--brand);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+}
+
+.doctor-analysis__text {
+    margin: 0;
+    color: #344054;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.doctor-evidence-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.doctor-evidence-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 10px;
+    background: #fff;
+    border: 1px solid #e6eaf0;
+    border-radius: 9px;
+}
+
+.doctor-evidence-item__key {
+    color: #667085;
+    font-size: 12px;
+}
+
+.doctor-evidence-item__value {
+    color: #172033;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: right;
+}
+
+.doctor-analysis__source {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #667085;
+    font-size: 12px;
+}
+
+.doctor-analysis__source code {
+    padding: 3px 7px;
+    color: #475467;
+    background: #f2f4f7;
+    border-radius: 6px;
+}
+
+html[data-theme="dark"] body .doctor-analysis__block {
+    background: #101827;
+    border-color: #2e3b52;
+}
+
+html[data-theme="dark"] body .doctor-analysis__label {
+    color: #93c5fd;
+}
+
+html[data-theme="dark"] body .doctor-analysis__text {
+    color: #eef2f8;
+}
+
+html[data-theme="dark"] body .doctor-evidence-item {
+    background: #121d2e;
+    border-color: #2e3b52;
+}
+
+html[data-theme="dark"] body .doctor-evidence-item__key {
+    color: #aeb9cb;
+}
+
+html[data-theme="dark"] body .doctor-evidence-item__value {
+    color: #ffffff;
+}
+
+html[data-theme="dark"] body .doctor-analysis__source {
+    color: #aeb9cb;
+}
+
+html[data-theme="dark"] body .doctor-analysis__source code {
+    color: #dbeafe;
+    background: #182338;
+}
+
+@media(max-width: 700px) {
+    .doctor-evidence-grid {
+        grid-template-columns: 1fr;
+    }
+}

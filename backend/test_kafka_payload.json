@@ -1,0 +1,31 @@
+{
+  "studyIUID": "1.2.643.547.20261004.0001",
+  "aiResult": {
+    "seriesIUID": "1.2.643.547.20261004.0001.1",
+    "pathologyFlag": true,
+    "confidenceLevel": 91,
+    "modelId": 1547,
+    "modelVersion": "pelvic-ai-demo-1.0",
+    "report": "В проекции правого яичника определяется объемное образование неоднородной структуры размером 67 x 54 мм с солидным компонентом и внутренней васкуляризацией. Отмечается небольшое количество свободной жидкости в полости малого таза.",
+    "conclusion": "МР-признаки образования правого яичника с подозрением на злокачественный процесс. Требуется уточнение распространенности и морфологическая верификация.",
+    "probParams": {
+      "pelvic_mass": {
+        "side": "right",
+        "size_mm_x": 67,
+        "size_mm_y": 54,
+        "solid_component": true,
+        "vascularization": true,
+        "free_fluid": true
+      }
+    }
+  },
+  "patientContext": {
+    "age": 58,
+    "sex": "female",
+    "morphologyVerified": false,
+    "priorPelvicUltrasound": true,
+    "ultrasoundInterpretation": "suspicious",
+    "iodinatedContrastContraindication": false,
+    "gadoliniumContraindication": false
+  }
+}

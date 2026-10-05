@@ -37,7 +37,7 @@ export const DEMOS = [
         title: "Несколько находок",
         description:
             "Несколько независимых рекомендаций.",
-        file: "/static/mocks/multiple-findings.json"
+        file: "/static/mocks/multiple.json"
     }
 ];
 

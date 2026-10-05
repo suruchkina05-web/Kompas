@@ -1,64 +1,23 @@
-# app/main.py
+from __future__ import annotations
 
-from typing import Any, Literal
+from typing import Any
 
 from fastapi import Body, FastAPI, HTTPException
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
-from pydantic import BaseModel
-
-from app.llm import send_to_routing_llm
+from app.routing_models import RoutingResponse
+from app.routing_service import route_payload
 from app.site import router as site_router
 
-
-# ============================================================
-# RESPONSE SCHEMA
-# ============================================================
-
-class Recommendation(BaseModel):
-    action_type: Literal[
-        "specialist_consultation",
-        "additional_diagnostic_exam",
-        "repeat_exam",
-        "follow_up",
-        "physician_review",
-        "no_automatic_recommendation",
-    ]
-
-    target: str | None = None
-    priority: str | None = None
-
-    reason: str
-    evidence: list[str]
-    source: str | None = None
-
-
-class RoutingResponse(BaseModel):
-    status: Literal[
-        "ok",
-        "insufficient_data",
-        "insufficient_guideline_context",
-        "conflict_requires_review",
-    ]
-
-    recommendations: list[Recommendation]
-    missing_data: list[str]
-    warnings: list[str]
-
-
-# ============================================================
-# FASTAPI
-# ============================================================
 
 app = FastAPI(
     title="Компас Routing API",
     description=(
-        "Сервис маршрутизации пациентов по результатам "
-        "лучевой диагностики с использованием Qwen LLM "
-        "через Yandex AI Studio."
+        "Сервис маршрутизации пациентов по результатам лучевой диагностики. "
+        "REST и Kafka используют единый routing pipeline."
     ),
-    version="3.0.0",
+    version="3.1.0",
 )
 
 app.mount(
@@ -67,42 +26,30 @@ app.mount(
     name="static",
 )
 
-# Подключаем HTML-интерфейс /app
 app.include_router(site_router)
 
 
-# ============================================================
-# SYSTEM
-# ============================================================
-
-@app.get(
-    "/",
-    include_in_schema=False,
-)
+@app.get("/", include_in_schema=False)
 def root():
-    """
-    Главная страница сразу открывает пользовательский интерфейс.
-    """
-    return RedirectResponse(
-        url="/app"
-    )
+    return RedirectResponse(url="/app")
 
 
-@app.get(
-    "/health",
-    tags=["System"],
-)
+@app.get("/health", tags=["System"])
 def health():
     return {
         "status": "ok",
         "service": "compass-routing-api",
-        "version": "3.0.0",
+        "version": "3.1.0",
     }
 
 
-# ============================================================
-# ROUTING
-# ============================================================
+@app.get("/ready", tags=["System"])
+def ready():
+    return {
+        "status": "ready",
+        "service": "compass-routing-api",
+    }
+
 
 @app.post(
     "/api/v1/routing",
@@ -113,22 +60,12 @@ def route_study(
     payload: dict[str, Any] = Body(...),
 ):
     """
-    Получает структурированный результат исследования
-    и передаёт его в routing-модель Yandex AI Studio.
+    REST adapter.
 
-    Входной payload передаётся в LLM без изменения.
+    Тот же route_payload() используется Kafka worker'ом.
     """
-
     try:
-        result = send_to_routing_llm(
-            payload
-        )
-
-        # Проверяем, что ответ модели соответствует
-        # контракту RoutingResponse.
-        return RoutingResponse.model_validate(
-            result
-        )
+        return route_payload(payload)
 
     except ValueError as exc:
         raise HTTPException(
@@ -142,15 +79,9 @@ def route_study(
     except Exception as exc:
         raise HTTPException(
             status_code=502,
-            detail=(
-                f"Routing service error: {exc}"
-            ),
+            detail=f"Routing service error: {exc}",
         ) from exc
 
-
-# ============================================================
-# LOCAL DEV
-# ============================================================
 
 if __name__ == "__main__":
     import uvicorn

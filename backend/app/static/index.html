@@ -4,29 +4,30 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Компас</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/style.css?v=20261004-1636">
 </head>
-
 <body>
 <header class="hero">
     <div class="hero__inner">
+        <div class="hero__top">
+            <div class="hero__eyebrow">Клинический навигатор</div>
+            <button id="themeToggle" class="theme-toggle" type="button" aria-label="Переключить тему">Тёмная тема</button>
+        </div>
         <h1>Компас</h1>
         <p>
-            AI-маршрутизация пациента после лучевой диагностики:
-            следующий шаг, обоснование, исходные данные и источник правила.
+            Один маршрут — три уровня представления: понятный пациенту,
+            клинически подробный для врача и технический для команды проекта.
         </p>
     </div>
 </header>
 
 <main class="wrap">
-
     <section class="card">
         <div class="section-head">
             <div>
-                <h2>1. Выберите сценарий</h2>
+                <h2>1. Входные данные</h2>
                 <p class="hint">
-                    Запустите один из демонстрационных кейсов
-                    или загрузите собственный JSON-файл исследования.
+                    Выберите демонстрационный сценарий или загрузите собственный JSON.
                 </p>
             </div>
         </div>
@@ -34,97 +35,115 @@
         <div id="demoGrid" class="demo-grid"></div>
 
         <div class="upload-box">
-            <input
-                id="jsonFile"
-                type="file"
-                accept=".json,application/json"
-                hidden
-            >
-
-            <button
-                id="uploadButton"
-                type="button"
-                class="button button--secondary"
-            >
-                📂 Загрузить собственный JSON
+            <input id="jsonFile" type="file" accept=".json,application/json" hidden>
+            <button id="uploadButton" type="button" class="button button--secondary">
+                Загрузить собственный JSON
             </button>
-
             <div id="fileName" class="hint upload-name"></div>
         </div>
 
         <div class="actions">
-            <button
-                id="runButton"
-                type="button"
-                class="button"
-                disabled
-            >
+            <button id="runButton" type="button" class="button" disabled>
                 Построить маршрут
             </button>
-
-            <button
-                id="resetButton"
-                type="button"
-                class="button button--secondary"
-            >
+            <button id="resetButton" type="button" class="button button--secondary">
                 Сбросить
             </button>
         </div>
 
         <div id="selectedCase" class="selected-case" hidden></div>
-        <button
-            id="showInputButton"
-            type="button"
-            class="button button--secondary"
-            hidden
-        >
-            👁 Посмотреть входной JSON
-        </button>
-
-        <details
-            id="inputJsonBox"
-            class="raw"
-            hidden
-        >
-            <summary>Входной JSON</summary>
-            <pre id="rawInput"></pre>
-        </details>
         <div id="busy" class="busy"></div>
         <div id="error" class="error"></div>
     </section>
 
-
-    <section id="result" class="card" hidden>
-        <h2>2. Результат маршрутизации</h2>
-
-        <div class="status-row">
-            <span>Статус:</span>
-            <span id="status" class="status"></span>
+    <section id="result" class="card result-card" hidden>
+        <div class="result-heading">
+            <div>
+                <div class="section-kicker">2. Результат маршрутизации</div>
+                <h2>Выберите представление</h2>
+            </div>
+            <div class="status-row status-row--compact">
+                <span id="status" class="status"></span>
+            </div>
         </div>
 
-        <div id="warnings"></div>
-        <div id="missing"></div>
+        <div class="view-tabs" role="tablist" aria-label="Представление результата">
+            <button class="view-tab is-active" type="button" data-view="patient" role="tab" aria-selected="true">
+                <span><strong>Пациент</strong><small>Что делать дальше</small></span>
+            </button>
+            <button class="view-tab" type="button" data-view="doctor" role="tab" aria-selected="false">
+                <span><strong>Врач</strong><small>Клиническое обоснование</small></span>
+            </button>
+            <button class="view-tab" type="button" data-view="system" role="tab" aria-selected="false">
+                <span><strong>Под капотом</strong><small>JSON и логика сервиса</small></span>
+            </button>
+        </div>
 
-        <h3>Рекомендации</h3>
-        <div id="recommendations"></div>
+        <div id="patientPanel" class="view-panel" data-panel="patient">
+            <div class="audience-intro audience-intro--patient">
+                <div>
+                    <strong>Понятный маршрут для пациента</strong>
+                    <p>Без технических полей, внутренних ID и машинных признаков.</p>
+                </div>
+            </div>
+            <div id="patientWarnings"></div>
+            <div id="patientRecommendations"></div>
+            <div class="patient-note">
+                Компас не ставит диагноз и не назначает лечение. Итоговое решение принимает лечащий врач.
+            </div>
+        </div>
 
-        <details class="raw">
-            <summary>Технический JSON ответа</summary>
-            <pre id="rawResponse"></pre>
-        </details>
+        <div id="doctorPanel" class="view-panel" data-panel="doctor" hidden>
+            <div class="audience-intro audience-intro--doctor">
+                <div>
+                    <strong>Клиническое представление</strong>
+                    <p>Рекомендации, приоритет, основания, недостающие данные и источник правила.</p>
+                </div>
+            </div>
+            <div id="warnings"></div>
+            <div id="missing"></div>
+            <h3>Рекомендации</h3>
+            <div id="doctorRecommendations"></div>
+        </div>
+
+        <div id="systemPanel" class="view-panel" data-panel="system" hidden>
+            <div class="audience-intro audience-intro--system">
+                <div>
+                    <strong>Технический слой</strong>
+                    <p>То, что полезно разработчикам и жюри: вход, API-пайплайн и исходный ответ.</p>
+                </div>
+            </div>
+
+            <div class="pipeline" aria-label="Пайплайн обработки">
+                <div class="pipeline__step"><span>1</span><strong>Входной JSON</strong><small>данные исследования</small></div>
+                <div class="pipeline__arrow">→</div>
+                <div class="pipeline__step"><span>2</span><strong>Backend API</strong><small>/api/v1/routing</small></div>
+                <div class="pipeline__arrow">→</div>
+                <div class="pipeline__step"><span>3</span><strong>Логика маршрута</strong><small>LLM + правила/КР</small></div>
+                <div class="pipeline__arrow">→</div>
+                <div class="pipeline__step"><span>4</span><strong>Ответ</strong><small>структурированный JSON</small></div>
+            </div>
+
+            <div id="systemSources" class="system-sources"></div>
+
+            <details class="raw" open>
+                <summary>Входной JSON</summary>
+                <pre id="rawInput"></pre>
+            </details>
+            <details class="raw">
+                <summary>Технический JSON ответа</summary>
+                <pre id="rawResponse"></pre>
+            </details>
+        </div>
     </section>
-
 </main>
 
 <footer class="footer">
-    Компас не анализирует медицинские изображения самостоятельно
-    и не заменяет врача. Сервис использует результат диагностической системы,
-    клинический контекст и переданную базу правил для формирования следующего шага.
+    Компас не анализирует медицинские изображения самостоятельно и не заменяет врача.
+    Сервис использует структурированные результаты исследования, клинический контекст
+    и переданную базу правил для формирования следующего шага.
 </footer>
 
-<script
-    type="module"
-    src="/static/app.js"
-></script>
+<script type="module" src="/static/app.js?v=20261004-1636"></script>
 </body>
 </html>
